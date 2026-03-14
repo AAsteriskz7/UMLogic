@@ -302,21 +302,20 @@ export default function UCDInteractiveBuild() {
   // Zoom Handlers
   const zoomIn = () => setZoom(z => Math.min(z + 0.2, 3));
   const zoomOut = () => setZoom(z => {
-    const newZoom = Math.max(z - 0.2, 0.5);
-    if (newZoom <= 1) setOffset({x:0, y:0});
+    const newZoom = Math.max(z - 0.2, 0.1);
+    if (newZoom <= 0.1) setOffset({x:0, y:0});
     return newZoom;
   });
   const resetZoom = () => { setZoom(1); setOffset({x:0, y:0}); };
 
   // Pan Handlers
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (zoom <= 1) return;
     setIsDragging(true);
     setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || zoom <= 1) return;
+    if (!isDragging) return;
     setOffset({
       x: e.clientX - dragStart.x,
       y: e.clientY - dragStart.y
@@ -376,7 +375,7 @@ export default function UCDInteractiveBuild() {
 
           <div 
             ref={containerRef}
-            className={`flex-1 p-4 relative overflow-hidden flex items-center justify-center bg-white cursor-${zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'}`}
+            className={`flex-1 p-4 relative overflow-hidden flex items-center justify-center bg-white cursor-${isDragging ? 'grabbing' : 'grab'}`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -397,14 +396,14 @@ export default function UCDInteractiveBuild() {
               />
             )}
             
-            {zoom > 1 && (
+            {zoom > 1 || offset.x !== 0 || offset.y !== 0 ? (
                 <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-primary/90 text-white text-[10px] font-bold rounded-full shadow-lg backdrop-blur-sm pointer-events-none animate-in fade-in slide-in-from-bottom-2">
                     <span className="flex items-center gap-1">
                         <span className="material-symbols-outlined text-xs">pan_tool</span>
-                        Click and drag to pan
+                        Drag to explore
                     </span>
                 </div>
-            )}
+            ) : null}
           </div>
 
           <div className="p-5 border-t border-primary/10 bg-white dark:bg-slate-900 z-10">
