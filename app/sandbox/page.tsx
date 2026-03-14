@@ -58,13 +58,22 @@ export default function SandboxPage() {
       // The filter prevents html-to-image from trying to read CSS rules that are cross-origin
       // or from injected fonts that cause Security/Syntax errors.
       const filter = (node: HTMLElement) => {
+        // Skip Monaco Editor and other UI elements
         const exclusionClasses = ['monaco-editor', 'codicon'];
-        return !exclusionClasses.some(cls => node.classList?.contains(cls));
+        if (exclusionClasses.some(cls => node.classList?.contains(cls))) return false;
+        
+        // Skip external stylesheets that cause SecurityErrors when scanned
+        if (node.tagName === 'LINK' || node.tagName === 'STYLE') return false;
+
+        return true;
       };
 
       const dataUrl = await toPng(previewRef.current, { 
         backgroundColor: '#ffffff',
         filter,
+        // Prevent SecurityError/SyntaxError from external font access
+        skipFonts: true,
+        fontEmbedCSS: '',
         // Ensure we capture it at a decent resolution regardless of current zoom
         pixelRatio: 2,
       });

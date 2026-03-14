@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const diagramLinks = [
   { label: 'UCD', href: '/diagrams/ucd', icon: 'person', title: 'Use Case Diagram' },
-  { label: 'MDM', href: '/diagrams/mdm', icon: 'hub', title: 'Multiplicity Diagram' },
+  { label: 'DMD', href: '/diagrams/dmd', icon: 'hub', title: 'Domain Model Diagram' },
   { label: 'SSD', href: '/diagrams/ssd', icon: 'settings_input_composite', title: 'System Sequence Diagram' },
   { label: 'SD',  href: '/diagrams/sd',  icon: 'swap_horiz', title: 'Sequence Diagram' },
   { label: 'DCD', href: '/diagrams/dcd', icon: 'account_tree', title: 'Design Class Diagram' },

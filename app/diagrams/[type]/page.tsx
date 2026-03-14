@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
 import UCDInteractiveBuild from '@/components/ucd-interactive-build';
+import SDInteractiveBuild from '@/components/sd-interactive-build';
 
 const DIAGRAM_TITLES: Record<string, string> = {
   ucd: 'Use Case Diagram',
@@ -571,7 +572,18 @@ export default function DiagramModule() {
           )}
           {/* ===== INTERACTIVE BUILD TAB ===== */}
           {activeTab === 'build' && (
-            <UCDInteractiveBuild />
+            <div className="animate-in fade-in duration-500">
+              {diagramType === 'ucd' && <UCDInteractiveBuild />}
+              {diagramType === 'sd' && <SDInteractiveBuild />}
+              {diagramType !== 'ucd' && diagramType !== 'sd' && (
+                <div className="h-[500px] flex items-center justify-center border-2 border-dashed border-primary/10 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50">
+                  <div className="text-center">
+                    <span className="material-symbols-outlined text-4xl text-primary/20 mb-3">construction</span>
+                    <p className="text-primary/40 font-medium">Interactive build for {diagramTitle} coming soon!</p>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* ===== QUIZ TAB ===== */}

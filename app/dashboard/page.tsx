@@ -112,6 +112,7 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
 // ─── Main Dashboard ───────────────────────────────────────────────
 export default function Dashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [briefOpen, setBriefOpen] = useState(false);
 
   const handleClearStorage = () => {
     localStorage.clear();
@@ -131,69 +132,35 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-8">
-            <div>
-              <motion.h2
-                className="text-2xl font-black text-slate-800 dark:text-slate-100"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                Welcome Back! 👋
-              </motion.h2>
-              <motion.p
-                className="text-sm text-slate-400 mt-0.5"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.25 }}
-              >
-                Keep the momentum — you&apos;re 65% through Module 2
-              </motion.p>
-            </div>
-            <motion.div
-              className="relative w-80"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+          <div>
+            <motion.h2
+              className="text-2xl font-black text-slate-800 dark:text-slate-100"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
-              <input
-                className="w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary text-sm shadow-sm outline-none transition-all"
-                placeholder="Search diagrams, scenarios..."
-                type="text"
-              />
-            </motion.div>
+              Welcome Back! 👋
+            </motion.h2>
+            <motion.p
+              className="text-sm text-slate-400 mt-0.5"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+            >
+              Keep the momentum — you&apos;re 65% through Module 2
+            </motion.p>
           </div>
           <motion.div
-            className="flex items-center gap-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
+            className="relative w-80"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSettingsOpen(true)}
-              className="p-2.5 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm hover:shadow-md transition-all border border-slate-100 dark:border-slate-700"
-            >
-              <span className="material-symbols-outlined text-[20px]">settings</span>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2.5 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm hover:shadow-md transition-all border border-slate-100 dark:border-slate-700 relative"
-            >
-              <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <motion.span 
-                className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent border-2 border-white dark:border-slate-800"
-                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </motion.button>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="h-10 w-10 rounded-full border-2 border-primary overflow-hidden bg-cover bg-center cursor-pointer ring-2 ring-offset-2 ring-transparent hover:ring-primary transition-all"
-              style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9pG0-q9tc8LKqYZxZX-w5_aE39ZCb8UZvnGYdfy4GBdwpjqQyXg6MzqCie4-MOVrwzZpKrKjMvmUQDDNb4pddfATySXpiPQxiCUnRPCESjwoxuHHLy7PhusDDwpA_F2e-Ntoo0lbNncbaxsMB3M8Ztm0jlOENRXkw6XMIUY7sSWhu-pxm_dMxe177MHEaS0Qu4Ltqi8-_4fi8GVEZot_x5mPK-t3XgJW7ylvla7NDfTAReb3eukAQYyyxP3GqducN62y-jOJnqn5Y')" }}
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+            <input
+              className="w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary text-sm shadow-sm outline-none transition-all"
+              placeholder="Search diagrams, scenarios..."
+              type="text"
             />
           </motion.div>
         </motion.header>
@@ -279,14 +246,6 @@ export default function Dashboard() {
             transition={{ duration: 0.4 }}
           >
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Progress Tracking</h3>
-            <motion.a
-              className="text-sm font-semibold text-primary dark:text-primary/70 flex items-center gap-1 hover:gap-2 transition-all"
-              href="#"
-              whileHover={{ x: 2 }}
-            >
-              View Syllabus
-              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-            </motion.a>
           </motion.div>
           <div className="grid grid-cols-5 gap-4">
             <ProgressCard label="UCD" subtitle="Use Case Diagram"    pct={100} status="ready"       delay={0.1} />
@@ -325,29 +284,26 @@ export default function Dashboard() {
                   <span className="px-2 py-0.5 bg-accent/10 text-accent text-[10px] font-bold rounded border border-accent/20">CASE STUDY</span>
                 </motion.div>
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                  Build a unified student management system for Northwood University. Handle real-time registration, course scheduling conflicts, and resource allocation across three campuses.
+                  Manage student organizations, memberships, and events across Georgia Tech. Handle organization requests, event RSVPs, and capacity management for a vibrant campus life.
                 </p>
               </div>
               <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-6">
-                <div className="flex -space-x-2">
-                  <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBG6HaC3mDAq0GaCCtzYkfPqOOgZ18AG-uYOWM5wN8Bco_Aa56FjRQcCNrb3LTk4jkjf7FTG8I87z2WIczEoVwgazrnKJSDo63Gz6Ud_E1-LEGmE8ZQnZxXmzMl3-uaxmiPHpAvr3euMddbw2D0ffAPOhbYvO7iZ6Dm1NAT3elFJB36DdDisfImwmqdN8tQU6r2u9P0Lait-zUystxB8LxYxko2ysbQBD5KnOWDAIXFvmwn4kQjklw8E7ZGZxI1gm6fPlwmsW3YqKwm')" }} />
-                  <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4CQgaMHzjUq7wDkbS-TAbyrNldrt5g9jwUY2j9eQ-5Xc1AIWv5cM9uFC6pD1d87je1pfhIe-KFYmqecam-lkfA55eEQ7lzBhcBoaS3c6ceDU313K0daaCCd5TK838TfYgLnL3ayBxKv1oeOJVDlO1Pb1aFkkBB_e8UoluGplL6x7efBfnhz-RRGNc48fTBSnGOilV1lzPlD8HyC6GEIiLAIlcqApUhqJW-xubj1x9dhDA23jqt2Yb9Y57UKlA5plnOhflEeTA8WGR')" }} />
-                  <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">+12</div>
+                <div className="flex items-center gap-3">
+                  <div className="flex -space-x-2">
+                    <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBG6HaC3mDAq0GaCCtzYkfPqOOgZ18AG-uYOWM5wN8Bco_Aa56FjRQcCNrb3LTk4jkjf7FTG8I87z2WIczEoVwgazrnKJSDo63Gz6Ud_E1-LEGmE8ZQnZxXmzMl3-uaxmiPHpAvr3euMddbw2D0ffAPOhbYvO7iZ6Dm1NAT3elFJB36DdDisfImwmqdN8tQU6r2u9P0Lait-zUystxB8LxYxko2ysbQBD5KnOWDAIXFvmwn4kQjklw8E7ZGZxI1gm6fPlwmsW3YqKwm')" }} />
+                    <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4CQgaMHzjUq7wDkbS-TAbyrNldrt5g9jwUY2j9eQ-5Xc1AIWv5cM9uFC6pD1d87je1pfhIe-KFYmqecam-lkfA55eEQ7lzBhcBoaS3c6ceDU313K0daaCCd5TK838TfYgLnL3ayBxKv1oeOJVDlO1Pb1aFkkBB_e8UoluGplL6x7efBfnhz-RRGNc48fTBSnGOilV1lzPlD8HyC6GEIiLAIlcqApUhqJW-xubj1x9dhDA23jqt2Yb9Y57UKlA5plnOhflEeTA8WGR')" }} />
+                    <div className="h-8 w-8 rounded-full border-2 border-white bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">+5</div>
+                  </div>
+                  <span className="text-xs font-bold text-slate-400">Diagram Modules</span>
                 </div>
                 <div className="flex gap-3">
                   <motion.button
+                    onClick={() => setBriefOpen(true)}
                     whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="px-5 py-2 rounded-lg text-sm font-bold border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors"
-                  >
-                    Read Brief
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.04, boxShadow: '0 8px 24px rgba(0,48,87,0.25)' }}
                     whileTap={{ scale: 0.97 }}
                     className="px-5 py-2 rounded-lg text-sm font-bold bg-primary text-white hover:opacity-90 transition-opacity"
                   >
-                    Open Dashboard
+                    Read Brief
                   </motion.button>
                 </div>
               </div>
@@ -379,6 +335,44 @@ export default function Dashboard() {
                     Clear Local Storage &amp; Reset Progress
                   </motion.button>
                 </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
+
+      {/* Brief Dialog */}
+      <AnimatePresence>
+        {briefOpen && (
+          <Dialog open={briefOpen} onOpenChange={setBriefOpen}>
+            <DialogContent className="sm:max-w-2xl font-display max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-black text-primary">CampusConnect Brief</DialogTitle>
+                <DialogDescription className="text-slate-500">
+                  Georgia Tech&apos;s centralized student organization management system.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-6 py-4">
+                <section>
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-2 border-b pb-1">The Goal</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    CampusConnect is designed to streamline how student organizations, memberships, and events are managed across campus. The system supports multiple organizations, each with a unique ID, description, one president, and multiple officers.
+                  </p>
+                </section>
+                <section>
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-2 border-b pb-1">Key Scenarios</h4>
+                  <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 space-y-2">
+                    <li><strong>Scenario 1:</strong> Jordan joining the AI Club via university authentication. Maya (President) approves the request.</li>
+                    <li><strong>Scenario 2:</strong> Daniel (Officer) creating a Robotics workshop. Handling RSVPs and capacity limits.</li>
+                    <li><strong>Scenario 3:</strong> Priya viewing her memberships and upcoming events for the week.</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 mb-2 border-b pb-1">Technical Focus</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    This interactive tool focuses on teaching UML diagramming (UCD, DMD, SSD, SD, DCD) by visualizing the internal logic and connections between these scenarios.
+                  </p>
+                </section>
               </div>
             </DialogContent>
           </Dialog>
