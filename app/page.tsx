@@ -24,9 +24,6 @@ export default function LandingPage() {
             <a className="hover:text-[#B3A369] transition-colors" href="#testimonials">Testimonials</a>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="hidden sm:block text-sm font-bold text-[#B3A369] hover:text-primary transition-colors">
-              Log In
-            </Link>
             <Link
               href="/dashboard"
               className="bg-[#B3A369] text-primary px-6 py-2.5 rounded-full font-bold text-sm hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(179,163,105,0.3)]"
