@@ -22,7 +22,7 @@ export default function AppSidebar({ onSettings }: { onSettings?: () => void }) 
         {/* Logo */}
         <div className="flex items-center gap-3 px-1">
           <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-primary shrink-0">
-            <span className="material-symbols-outlined font-bold">account_tree</span>
+            <span className="material-symbols-outlined font-bold">schema</span>
           </div>
           <div className="flex flex-col">
             <h1 className="text-white text-lg font-bold leading-none">UMLogic</h1>

@@ -6,6 +6,7 @@ import AppSidebar from '@/components/app-sidebar';
 import UCDInteractiveBuild from '@/components/ucd-interactive-build';
 import SDInteractiveBuild from '@/components/sd-interactive-build';
 import { SSDInteractiveBuild } from '@/components/ssd-interactive-build';
+import { DMDInteractiveBuild } from '@/components/dmd-interactive-build';
 
 const DIAGRAM_TITLES: Record<string, string> = {
   ucd: 'Use Case Diagram',
@@ -577,7 +578,8 @@ export default function DiagramModule() {
               {diagramType === 'ucd' && <UCDInteractiveBuild />}
               {diagramType === 'sd' && <SDInteractiveBuild />}
               {diagramType === 'ssd' && <SSDInteractiveBuild />}
-              {diagramType !== 'ucd' && diagramType !== 'sd' && diagramType !== 'ssd' && (
+              {diagramType === 'dmd' && <DMDInteractiveBuild />}
+              {diagramType !== 'ucd' && diagramType !== 'sd' && diagramType !== 'ssd' && diagramType !== 'dmd' && (
                 <div className="h-[500px] flex items-center justify-center border-2 border-dashed border-primary/10 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50">
                   <div className="text-center">
                     <span className="material-symbols-outlined text-4xl text-primary/20 mb-3">construction</span>

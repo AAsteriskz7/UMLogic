@@ -270,16 +270,6 @@ export default function Dashboard() {
                     play_arrow
                   </motion.span>
                 </motion.button>
-                <motion.button
-                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm transition-colors"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.75 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  Exam Simulation
-                </motion.button>
               </div>
             </div>
           </div>
