@@ -44,31 +44,15 @@ function useCountUp(target: number, duration = 1.2) {
   return { count, ref };
 }
 
-// ─── Mini Sparkline Component ─────────────────────────────────────
-function Sparkline({ pct, color }: { pct: number; color: string }) {
-  return (
-    <div className="relative h-1.5 w-full bg-white/10 rounded-full overflow-hidden mt-2">
-      <motion.div
-        className="absolute h-full rounded-full"
-        style={{ backgroundColor: color }}
-        initial={{ width: 0 }}
-        animate={{ width: `${pct}%` }}
-        transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
-      />
-    </div>
-  );
-}
-
 // ─── Progress Card ────────────────────────────────────────────────
 interface ProgressCardProps {
   label: string; subtitle: string; pct: number;
-  status: 'ready' | 'in-progress' | 'locked'; delay: number; href?: string;
+  status: 'ready' | 'in-progress'; delay: number;
 }
 
 const statusConfig = {
-  ready:       { badge: 'READY',       bg: 'bg-emerald-100', text: 'text-emerald-700', stroke: '#10b981', ring: '#10b981' },
+  ready:       { badge: 'COMPLETED',   bg: 'bg-emerald-100', text: 'text-emerald-700', stroke: '#10b981', ring: '#10b981' },
   'in-progress': { badge: 'IN PROGRESS', bg: 'bg-blue-100',   text: 'text-blue-700',   stroke: '#003057', ring: '#003057' },
-  locked:      { badge: 'LOCKED',      bg: 'bg-slate-100',   text: 'text-slate-500',  stroke: '#cbd5e1', ring: '#cbd5e1' },
 };
 
 function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps) {
@@ -81,8 +65,8 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
     <motion.div
       variants={fadeUp}
       transition={{ duration: 0.5, delay }}
-      whileHover={status !== 'locked' ? { y: -6, scale: 1.03, boxShadow: '0 20px 40px rgba(0,48,87,0.15)' } : {}}
-      className={`bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 cursor-default select-none transition-colors ${status === 'locked' ? 'opacity-55' : 'hover:border-primary/30'}`}
+      whileHover={{ y: -6, scale: 1.03, boxShadow: '0 20px 40px rgba(0,48,87,0.15)' }}
+      className="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 cursor-default select-none transition-colors hover:border-primary/30"
     >
       <div className="flex justify-between items-start mb-4">
         <div className="relative h-12 w-12 flex items-center justify-center">
@@ -101,7 +85,9 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
           </svg>
           <div ref={ref} className="text-[10px] font-bold">{count}%</div>
         </div>
-        <span className={`px-2 py-1 ${cfg.bg} ${cfg.text} text-[10px] font-bold rounded-lg uppercase tracking-tight`}>{cfg.badge}</span>
+        <span className={`px-2 py-1 ${cfg.bg} ${cfg.text} text-[10px] font-bold rounded-lg uppercase tracking-tight`}>
+          {pct === 0 ? 'START' : cfg.badge}
+        </span>
       </div>
       <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">{label}</h4>
       <p className="text-xs text-slate-500">{subtitle}</p>
@@ -113,17 +99,54 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
 export default function Dashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
+  const [progress, setProgress] = useState<Record<string, any>>({});
 
-  // Hardcoded for now until local storage logic is fully wired, but made consistent
-  const modules = [
-    { label: "UCD", subtitle: "Use Case Diagram",    pct: 100, status: "ready" as const },
-    { label: "DMD", subtitle: "Domain Model",        pct: 65,  status: "in-progress" as const },
-    { label: "SSD", subtitle: "System Sequence",     pct: 0,   status: "locked" as const },
-    { label: "SD",  subtitle: "Sequence Diagram",    pct: 0,   status: "locked" as const },
-    { label: "DCD", subtitle: "Design Class",        pct: 0,   status: "locked" as const },
+  useEffect(() => {
+    const saved = localStorage.getItem('umlogic_progress');
+    if (saved) {
+      setProgress(JSON.parse(saved));
+    } else {
+      // Default initial state
+      const initial = {
+        ucd: { purpose: true, builder: true, quiz: 100 },
+        dmd: { purpose: true, builder: false, quiz: 0 },
+        ssd: { purpose: false, builder: false, quiz: 0 },
+        sd:  { purpose: false, builder: false, quiz: 0 },
+        dcd: { purpose: false, builder: false, quiz: 0 },
+      };
+      localStorage.setItem('umlogic_progress', JSON.stringify(initial));
+      setProgress(initial);
+    }
+  }, []);
+
+  const calculatePct = (key: string) => {
+    const p = progress[key];
+    if (!p) return 0;
+    let score = 0;
+    if (p.purpose) score += 33;
+    if (p.builder) score += 33;
+    if (p.quiz > 0) score += Math.round((p.quiz / 100) * 34);
+    return Math.min(100, score);
+  };
+
+  const modulesData = [
+    { id: 'ucd', label: "UCD", subtitle: "Use Case Diagram" },
+    { id: 'dmd', label: "DMD", subtitle: "Domain Model" },
+    { id: 'ssd', label: "SSD", subtitle: "System Sequence" },
+    { id: 'sd',  label: "SD",  subtitle: "Sequence Diagram" },
+    { id: 'dcd', label: "DCD", subtitle: "Design Class" },
   ];
 
-  const currentModule = modules.find(m => m.status === 'in-progress') || modules[0];
+  const modules = modulesData.map(m => {
+    const pct = calculatePct(m.id);
+    return {
+      ...m,
+      pct,
+      status: (pct === 100 ? 'ready' : 'in-progress') as 'ready' | 'in-progress'
+    };
+  });
+
+  const currentModule = modules.find(m => m.pct < 100) || modules[0];
   const moduleIndex = modules.indexOf(currentModule) + 1;
 
   const handleClearStorage = () => {
@@ -179,11 +202,10 @@ export default function Dashboard() {
 
         {/* ── Hero Banner ───────────────────────────────────────── */}
         <motion.section
-          className="bg-primary rounded-2xl overflow-hidden mb-8 shadow-xl relative group cursor-pointer"
+          className="bg-primary rounded-2xl overflow-hidden mb-8 shadow-xl relative group cursor-default"
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
-          whileHover={{ scale: 1.005 }}
         >
           {/* animated shimmer on hover */}
           <motion.div
@@ -201,7 +223,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
               >
-                Featured Course
+                {currentModule.pct === 0 ? "Start Learning" : "Continue Learning"}
               </motion.span>
               <motion.h2
                 className="text-white text-4xl font-black mb-3"
@@ -209,7 +231,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.45 }}
               >
-                Mastering Objects &amp; Design
+                Module {moduleIndex}: {currentModule.subtitle}
               </motion.h2>
               <motion.p
                 className="text-white/70 text-base mb-6"
@@ -217,26 +239,40 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 }}
               >
-                Master software modeling with interactive scenarios and real-time feedback.
+                {currentModule.id === 'ucd' ? "Master actors and system boundaries." : 
+                 currentModule.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
+                 "Deep dive into the internal logic and consistency of CampusConnect."}
               </motion.p>
-              <motion.button
-                className="bg-accent text-primary px-7 py-3 rounded-xl font-extrabold text-sm flex items-center gap-2 group/btn"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.65 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                Start Learning
-                <motion.span
-                  className="material-symbols-outlined text-[16px]"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 4 }}
-                  transition={{ type: 'spring', stiffness: 400 }}
+              <div className="flex gap-4">
+                <motion.button
+                  className="bg-accent text-primary px-7 py-3 rounded-xl font-extrabold text-sm flex items-center gap-2 group/btn"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.65 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  arrow_forward
-                </motion.span>
-              </motion.button>
+                  {currentModule.pct === 0 ? "Start Module" : "Resume Module"}
+                  <motion.span
+                    className="material-symbols-outlined text-[16px]"
+                    initial={{ x: 0 }}
+                    whileHover={{ x: 4 }}
+                    transition={{ type: 'spring', stiffness: 400 }}
+                  >
+                    play_arrow
+                  </motion.span>
+                </motion.button>
+                <motion.button
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm transition-colors"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.75 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Exam Simulation
+                </motion.button>
+              </div>
             </div>
           </div>
           <div
@@ -259,9 +295,9 @@ export default function Dashboard() {
           >
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Progress Tracking</h3>
           </motion.div>
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {modules.map((m, idx) => (
-              <ProgressCard key={idx} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
+              <ProgressCard key={m.id} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
             ))}
           </div>
         </motion.section>

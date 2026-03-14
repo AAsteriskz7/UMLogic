@@ -16,15 +16,15 @@ export default function MermaidDiagram({ code, zoom = 1 }: MermaidDiagramProps) 
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'base',
+      theme: 'default',
       themeVariables: {
         primaryColor: '#003057',
-        primaryTextColor: '#fff',
         primaryBorderColor: '#003057',
         lineColor: '#003057',
         secondaryColor: '#B3A369',
-        tertiaryColor: '#f1f5f9',
+        tertiaryColor: '#f8fafc',
         fontFamily: 'Inter, sans-serif',
+        fontSize: '14px',
       },
     });
   }, []);

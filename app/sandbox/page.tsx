@@ -76,6 +76,8 @@ export default function SandboxPage() {
         fontEmbedCSS: '',
         // Ensure we capture it at a decent resolution regardless of current zoom
         pixelRatio: 2,
+        // Force a slight delay to ensure rendering is complete
+        cacheBust: true,
       });
       
       const link = document.createElement('a');
