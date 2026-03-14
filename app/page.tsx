@@ -46,7 +46,7 @@ const staggerChild: Variants = {
 // ═════════════════════════════════════════════════════════════════
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#F8FAFC] text-slate-700 font-display selection:bg-[#B3A369] selection:text-white">
+    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-700 font-display selection:bg-[#B3A369] selection:text-white">
 
       {/* Background Decorations */}
       <div className="absolute inset-0 grid-pattern pointer-events-none"></div>

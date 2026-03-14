@@ -25,7 +25,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${lexend.variable} font-display antialiased`}>
+      <body className={`${lexend.variable} font-display antialiased min-h-screen overflow-x-hidden`}>
         {children}
       </body>
     </html>
