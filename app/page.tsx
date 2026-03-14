@@ -60,12 +60,18 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto p-8">
         {/* Header/Search */}
         <header className="flex justify-between items-center mb-10">
-          <div className="relative w-96">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-            <input className="w-full bg-white dark:bg-slate-800 border-none rounded-xl py-2.5 pl-11 pr-4 focus:ring-2 focus:ring-primary text-sm shadow-sm" placeholder="Search diagrams, scenarios..." type="text" />
+          <div className="flex items-center gap-8">
+            <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">Welcome Back!</h2>
+            <div className="relative w-96">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+              <input className="w-full bg-white dark:bg-slate-800 border-none rounded-xl py-2.5 pl-11 pr-4 focus:ring-2 focus:ring-primary text-sm shadow-sm" placeholder="Search diagrams, scenarios..." type="text" />
+            </div>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm">
+            <button className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
+              <span className="material-symbols-outlined">settings</span>
+            </button>
+            <button className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-700">
               <span className="material-symbols-outlined">notifications</span>
             </button>
             <div className="h-10 w-10 rounded-full border-2 border-primary overflow-hidden bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9pG0-q9tc8LKqYZxZX-w5_aE39ZCb8UZvnGYdfy4GBdwpjqQyXg6MzqCie4-MOVrwzZpKrKjMvmUQDDNb4pddfATySXpiPQxiCUnRPCESjwoxuHHLy7PhusDDwpA_F2e-Ntoo0lbNncbaxsMB3M8Ztm0jlOENRXkw6XMIUY7sSWhu-pxm_dMxe177MHEaS0Qu4Ltqi8-_4fi8GVEZot_x5mPK-t3XgJW7ylvla7NDfTAReb3eukAQYyyxP3GqducN62y-jOJnqn5Y')" }} />
