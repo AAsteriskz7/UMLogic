@@ -2,6 +2,20 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Landing page utilities */
+.grid-pattern {
+  background-image: radial-gradient(circle, #B3A369 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.1;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #B3A369, #8E7F4D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
