@@ -39,6 +39,7 @@ export default function SandboxPage() {
   const [cursorPos, setCursorPos] = useState({ line: 1, column: 1 });
   const [showCheatSheet, setShowCheatSheet] = useState(true);
   const [zoom, setZoom] = useState(1);
+  const [diagramName, setDiagramName] = useState('Untitled Diagram');
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleEditorDidMount: OnMount = (editor) => {
@@ -81,7 +82,8 @@ export default function SandboxPage() {
       });
       
       const link = document.createElement('a');
-      link.download = `diagram-${Date.now()}.png`;
+      const fileName = diagramName.trim() ? diagramName.trim() : 'diagram';
+      link.download = `${fileName}-${Date.now()}.png`;
       link.href = dataUrl;
       link.click();
     } catch (err) {
@@ -127,6 +129,17 @@ export default function SandboxPage() {
               <span className="material-symbols-outlined text-sm">folder_open</span>
               Load 2340 Template
             </button>
+            <div className="h-6 w-px bg-primary/10 mx-1"></div>
+            <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-lg">
+              <span className="material-symbols-outlined text-sm text-primary/40">edit</span>
+              <input
+                type="text"
+                value={diagramName}
+                onChange={(e) => setDiagramName(e.target.value)}
+                placeholder="Diagram Name"
+                className="bg-transparent border-none outline-none text-xs font-bold text-primary placeholder:text-primary/30 w-40"
+              />
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex bg-primary/5 p-1 rounded-xl">

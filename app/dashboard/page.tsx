@@ -100,16 +100,17 @@ export default function Dashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
   const [progress, setProgress] = useState<Record<string, any>>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem('umlogic_progress');
     if (saved) {
       setProgress(JSON.parse(saved));
     } else {
-      // Default initial state
+      // Default initial state (absolute zero)
       const initial = {
-        ucd: { purpose: true, builder: true, quiz: 100 },
-        dmd: { purpose: true, builder: false, quiz: 0 },
+        ucd: { purpose: false, builder: false, quiz: 0 },
+        dmd: { purpose: false, builder: false, quiz: 0 },
         ssd: { purpose: false, builder: false, quiz: 0 },
         sd:  { purpose: false, builder: false, quiz: 0 },
         dcd: { purpose: false, builder: false, quiz: 0 },
@@ -137,7 +138,7 @@ export default function Dashboard() {
     { id: 'dcd', label: "DCD", subtitle: "Design Class" },
   ];
 
-  const modules = modulesData.map(m => {
+  const allModules = modulesData.map(m => {
     const pct = calculatePct(m.id);
     return {
       ...m,
@@ -146,8 +147,13 @@ export default function Dashboard() {
     };
   });
 
-  const currentModule = modules.find(m => m.pct < 100) || modules[0];
-  const moduleIndex = modules.indexOf(currentModule) + 1;
+  const filteredModules = allModules.filter(m => 
+    m.label.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    m.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const currentModule = allModules.find(m => m.pct < 100) || allModules[0];
+  const moduleIndex = allModules.indexOf(currentModule) + 1;
 
   const handleClearStorage = () => {
     localStorage.clear();
@@ -196,6 +202,8 @@ export default function Dashboard() {
               className="w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-primary text-sm shadow-sm outline-none transition-all"
               placeholder="Search diagrams, scenarios..."
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </motion.div>
         </motion.header>
@@ -295,10 +303,24 @@ export default function Dashboard() {
           >
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Progress Tracking</h3>
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {modules.map((m, idx) => (
-              <ProgressCard key={m.id} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 min-h-[140px]">
+            <AnimatePresence mode='popLayout'>
+              {filteredModules.length > 0 ? (
+                filteredModules.map((m, idx) => (
+                  <ProgressCard key={m.id} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
+                ))
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="col-span-full flex flex-col items-center justify-center py-10 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700"
+                >
+                  <span className="material-symbols-outlined text-slate-400 text-4xl mb-2">search_off</span>
+                  <p className="text-slate-500 font-medium">No diagrams match &quot;{searchQuery}&quot;</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </motion.section>
 
