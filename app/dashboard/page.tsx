@@ -114,6 +114,18 @@ export default function Dashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
 
+  // Hardcoded for now until local storage logic is fully wired, but made consistent
+  const modules = [
+    { label: "UCD", subtitle: "Use Case Diagram",    pct: 100, status: "ready" as const },
+    { label: "DMD", subtitle: "Domain Model",        pct: 65,  status: "in-progress" as const },
+    { label: "SSD", subtitle: "System Sequence",     pct: 0,   status: "locked" as const },
+    { label: "SD",  subtitle: "Sequence Diagram",    pct: 0,   status: "locked" as const },
+    { label: "DCD", subtitle: "Design Class",        pct: 0,   status: "locked" as const },
+  ];
+
+  const currentModule = modules.find(m => m.status === 'in-progress') || modules[0];
+  const moduleIndex = modules.indexOf(currentModule) + 1;
+
   const handleClearStorage = () => {
     localStorage.clear();
     window.location.reload();
@@ -147,7 +159,7 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
-              Keep the momentum — you&apos;re 65% through Module 2
+              Keep the momentum — you&apos;re {currentModule.pct}% through Module {moduleIndex} ({currentModule.label})
             </motion.p>
           </div>
           <motion.div
@@ -248,11 +260,9 @@ export default function Dashboard() {
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Progress Tracking</h3>
           </motion.div>
           <div className="grid grid-cols-5 gap-4">
-            <ProgressCard label="UCD" subtitle="Use Case Diagram"    pct={100} status="ready"       delay={0.1} />
-            <ProgressCard label="DMD" subtitle="Domain Model"        pct={65}  status="in-progress" delay={0.18} />
-            <ProgressCard label="SSD" subtitle="System Sequence"     pct={0}   status="locked"      delay={0.26} />
-            <ProgressCard label="SD"  subtitle="Sequence Diagram"    pct={0}   status="locked"      delay={0.34} />
-            <ProgressCard label="DCD" subtitle="Design Class"        pct={0}   status="locked"      delay={0.42} />
+            {modules.map((m, idx) => (
+              <ProgressCard key={idx} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
+            ))}
           </div>
         </motion.section>
 

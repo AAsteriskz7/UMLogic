@@ -113,19 +113,18 @@ const SD_STEPS: BuildStep[] = [
 
 // ─── Mermaid code generator ─────────────────────────────────────────
 function buildMermaidCode(step: number): string {
-  // step is 0-indexed
   const showDaniel        = step >= 0; 
-  const showDanielCreate  = step >= 1; // Step 2
-  const showSystemSubmit  = step >= 2; // Step 3
-  const showDBSave        = step >= 3; // Step 4
-  const showCreateConfirm = step >= 4; // Step 5
-  const showStudentRSVP   = step >= 5; // Step 6
-  const showCapacityCheck = step >= 6; // Step 7
-  const showAltAvailable  = step >= 7; // Step 8
-  const showAltFull       = step >= 8; // Step 9
-  const showCancelStart   = step >= 9; // Step 10
-  const showCancelFinish  = step >= 10; // Step 11
-  const showFinalNote     = step >= 11; // Step 12
+  const showDanielCreate  = step >= 1; 
+  const showSystemSubmit  = step >= 2; 
+  const showDBSave        = step >= 3; 
+  const showCreateConfirm = step >= 4; 
+  const showStudentRSVP   = step >= 5; 
+  const showCapacityCheck = step >= 6; 
+  const showAltAvailable  = step >= 7; 
+  const showAltFull       = step >= 8; 
+  const showCancelStart   = step >= 9; 
+  const showCancelFinish  = step >= 10; 
+  const showFinalNote     = step >= 11; 
 
   const lines: string[] = [];
   lines.push(`sequenceDiagram`);
@@ -136,7 +135,6 @@ function buildMermaidCode(step: number): string {
   lines.push(`    participant DB as Database : Database`);
   lines.push(``);
 
-  // Scenario 2: Create Event
   if (showDanielCreate) {
     lines.push(`    Officer->>UI: createEvent(title, description, date, location, maxCapacity)`);
   }
@@ -153,7 +151,6 @@ function buildMermaidCode(step: number): string {
   }
   lines.push(``);
 
-  // Scenario 3: RSVP
   if (showStudentRSVP) {
     lines.push(`    Student->>UI: reserveSpot(eventId)`);
   }
@@ -177,14 +174,11 @@ function buildMermaidCode(step: number): string {
         lines.push(`        UI-->>Student: Event full`);
         lines.push(`    end`);
     } else {
-        // Just show the start of alt if we haven't reached else yet
-        // Mermaid needs the block to be closed to render, so we close it
         lines.push(`    end`);
     }
   }
   lines.push(``);
 
-  // Cancellations
   if (showCancelStart) {
     lines.push(`    Student->>UI: cancelReservation(eventId)`);
     lines.push(`    UI->>System: Submit cancellation`);
@@ -211,6 +205,13 @@ export default function SDInteractiveBuild() {
   const diagramRef = useRef<HTMLDivElement>(null);
   const renderIdRef = useRef(0);
   const totalSteps = SD_STEPS.length;
+
+  // Zoom & Pan State
+  const [zoom, setZoom] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const currentRenderId = ++renderIdRef.current;
@@ -242,9 +243,8 @@ export default function SDInteractiveBuild() {
           const svgEl = diagramRef.current.querySelector('svg');
           if (svgEl) {
             svgEl.style.width = '100%';
-            svgEl.style.height = '100%';
+            svgEl.style.height = 'auto';
             svgEl.style.minHeight = '500px';
-            svgEl.style.maxHeight = '650px';
           }
         }
       } catch (e) {
@@ -267,17 +267,46 @@ export default function SDInteractiveBuild() {
 
   const next = useCallback(() => { if (step < totalSteps - 1) setStep(s => s + 1); }, [step, totalSteps]);
   const prev = useCallback(() => { if (step > 0) setStep(s => s - 1); }, [step]);
-  const reset = useCallback(() => { setStep(0); setPlaying(false); }, []);
+  const reset = useCallback(() => { setStep(0); setPlaying(false); setZoom(1); setOffset({x:0, y:0}); }, []);
   const togglePlay = useCallback(() => {
     if (step >= totalSteps - 1) { setStep(0); setPlaying(true); }
     else setPlaying(p => !p);
   }, [step, totalSteps]);
+
+  // Zoom Handlers
+  const zoomIn = () => setZoom(z => Math.min(z + 0.2, 3));
+  const zoomOut = () => setZoom(z => {
+    const newZoom = Math.max(z - 0.2, 0.5);
+    if (newZoom <= 1) setOffset({x:0, y:0});
+    return newZoom;
+  });
+  const resetZoom = () => { setZoom(1); setOffset({x:0, y:0}); };
+
+  // Pan Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (zoom <= 1) return;
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || zoom <= 1) return;
+    setOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') next();
       else if (e.key === 'ArrowLeft') prev();
       else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+      else if (e.key === '=' || e.key === '+') zoomIn();
+      else if (e.key === '-') zoomOut();
+      else if (e.key === '0') resetZoom();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
@@ -291,8 +320,8 @@ export default function SDInteractiveBuild() {
   return (
     <div className="grid grid-cols-12 gap-6">
       <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 flex-1 min-h-[700px] relative overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-primary/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 h-[750px] relative overflow-hidden flex flex-col">
+          <div className="p-4 border-b border-primary/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50 z-10">
             <div className="flex gap-2 items-center">
               <span className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full uppercase">
                 Step {step + 1} of {totalSteps}
@@ -301,25 +330,59 @@ export default function SDInteractiveBuild() {
                 Sequence Diagram — CampusConnect
               </span>
             </div>
-            {current.scenario && (
-              <span className="px-3 py-1 bg-primary/5 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
-                {current.scenario}
-              </span>
-            )}
+            <div className="flex items-center gap-1">
+                <button onClick={zoomOut} className="h-8 w-8 rounded-lg flex items-center justify-center text-primary/60 hover:bg-primary/5 hover:text-primary transition-all">
+                    <span className="material-symbols-outlined text-lg">zoom_out</span>
+                </button>
+                <button onClick={resetZoom} className="px-2 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-primary/40 hover:bg-primary/5 hover:text-primary transition-all uppercase tracking-tighter">
+                   {Math.round(zoom * 100)}%
+                </button>
+                <button onClick={zoomIn} className="h-8 w-8 rounded-lg flex items-center justify-center text-primary/60 hover:bg-primary/5 hover:text-primary transition-all">
+                    <span className="material-symbols-outlined text-lg">zoom_in</span>
+                </button>
+                {current.scenario && (
+                  <span className="ml-3 px-3 py-1 bg-primary/5 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
+                    {current.scenario}
+                  </span>
+                )}
+            </div>
           </div>
 
-          <div className="flex-1 p-4 relative overflow-auto flex items-center justify-center bg-white">
+          <div 
+            ref={containerRef}
+            className={`flex-1 p-4 relative overflow-hidden flex items-center justify-center bg-white cursor-${zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
             {renderError ? (
               <div className="text-red-500 text-sm p-4 bg-red-50 rounded-xl max-w-md text-center">
                 <span className="material-symbols-outlined block text-2xl mb-2">error</span>
                 Diagram render error.
               </div>
             ) : (
-              <div ref={diagramRef} className="w-full flex items-center justify-center" />
+              <div 
+                ref={diagramRef} 
+                className="w-full h-full flex items-center justify-center transition-transform duration-200 ease-out origin-center"
+                style={{ 
+                    transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
+                }}
+              />
+            )}
+            
+            {/* Zoom Indicator overlay when zoomed */}
+            {zoom > 1 && (
+                <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-primary/90 text-white text-[10px] font-bold rounded-full shadow-lg backdrop-blur-sm pointer-events-none animate-in fade-in slide-in-from-bottom-2">
+                    <span className="flex items-center gap-1">
+                        <span className="material-symbols-outlined text-xs">pan_tool</span>
+                        Click and drag to pan
+                    </span>
+                </div>
             )}
           </div>
 
-          <div className="p-5 border-t border-primary/10 bg-white dark:bg-slate-900">
+          <div className="p-5 border-t border-primary/10 bg-white dark:bg-slate-900 z-10">
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

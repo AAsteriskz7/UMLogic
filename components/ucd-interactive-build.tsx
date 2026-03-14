@@ -115,17 +115,16 @@ const UCD_STEPS: BuildStep[] = [
 const SF = `<img src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 80%22><circle cx=%2232%22 cy=%2212%22 r=%2210%22 stroke=%22black%22 stroke-width=%223%22 fill=%22none%22/><line x1=%2232%22 y1=%2222%22 x2=%2232%22 y2=%2252%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2216%22 y1=%2232%22 x2=%2248%22 y2=%2232%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2232%22 y1=%2252%22 x2=%2218%22 y2=%2276%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2232%22 y1=%2252%22 x2=%2246%22 y2=%2276%22 stroke=%22black%22 stroke-width=%223%22/></svg>' width='30'>`;
 
 function buildMermaidCode(step: number): string {
-  // step is 0-indexed
-  const showActorsLeft    = step >= 1;  // Step 2
-  const showAuth          = step >= 2;  // Step 3
-  const showUC1           = step >= 3;  // Step 4
-  const showUC1Conns      = step >= 4;  // Step 5
-  const showUC2           = step >= 5;  // Step 6
-  const showUC3           = step >= 6;  // Step 7
-  const showUC4           = step >= 7;  // Step 8
-  const showUC5           = step >= 8;  // Step 9
-  const showUC7           = step >= 9;  // Step 10
-  const showUC6           = step >= 10; // Step 11
+  const showActorsLeft    = step >= 1; 
+  const showAuth          = step >= 2; 
+  const showUC1           = step >= 3; 
+  const showUC1Conns      = step >= 4; 
+  const showUC2           = step >= 5; 
+  const showUC3           = step >= 6; 
+  const showUC4           = step >= 7; 
+  const showUC5           = step >= 8; 
+  const showUC7           = step >= 9; 
+  const showUC6           = step >= 10;
 
   const lines: string[] = [];
 
@@ -137,7 +136,6 @@ function buildMermaidCode(step: number): string {
   lines.push(`flowchart LR`);
   lines.push(``);
 
-  // Left actors subgraph
   if (showActorsLeft) {
     lines.push(`    subgraph Actors_Left[" "]`);
     lines.push(`        direction TB`);
@@ -148,7 +146,6 @@ function buildMermaidCode(step: number): string {
     lines.push(``);
   }
 
-  // System subgraph
   lines.push(`    subgraph CampusConnect_System["<b style='font-size: 1.25em;'>System</b>"]`);
   lines.push(`        direction TB`);
   if (showUC2) lines.push(`        UC2(["Search for Organization"])`);
@@ -159,14 +156,12 @@ function buildMermaidCode(step: number): string {
   if (showUC5) lines.push(`        UC5(["Create Event"])`);
   if (showUC1) lines.push(`        UC1(["Login to System"])`);
   if (!showUC1 && !showUC2 && !showUC3 && !showUC4 && !showUC5 && !showUC6 && !showUC7) {
-    // Empty system — add invisible placeholder so subgraph renders
     lines.push(`        _sys[" "]`);
     lines.push(`        style _sys fill:#BBDEFB,stroke:none,color:#BBDEFB`);
   }
   lines.push(`    end`);
   lines.push(``);
 
-  // Right actor subgraph
   if (showAuth) {
     lines.push(`    subgraph Actors_Right[" "]`);
     lines.push(`        direction TB`);
@@ -175,7 +170,6 @@ function buildMermaidCode(step: number): string {
     lines.push(``);
   }
 
-  // Connections
   if (showUC1Conns) {
     if (showActorsLeft) {
       lines.push(`    Student --- UC1`);
@@ -207,7 +201,6 @@ function buildMermaidCode(step: number): string {
 
   lines.push(``);
 
-  // Shapes & styles for actors
   if (showActorsLeft) {
     lines.push(`    Student@{ shape: rect}`);
     lines.push(`    President@{ shape: rect}`);
@@ -223,7 +216,6 @@ function buildMermaidCode(step: number): string {
     lines.push(`    style Actors_Right fill:none,stroke:none`);
   }
 
-  // Use case styles
   if (showUC1) lines.push(`    style UC1 fill:#fff,stroke:#333,stroke-width:2px`);
   if (showUC2) lines.push(`    style UC2 fill:#fff,stroke:#333,stroke-width:2px`);
   if (showUC3) lines.push(`    style UC3 fill:#fff,stroke:#333,stroke-width:2px`);
@@ -246,7 +238,13 @@ export default function UCDInteractiveBuild() {
   const renderIdRef = useRef(0);
   const totalSteps = UCD_STEPS.length;
 
-  // Render mermaid whenever step changes
+  // Zoom & Pan State
+  const [zoom, setZoom] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const currentRenderId = ++renderIdRef.current;
     setRenderError(null);
@@ -268,13 +266,11 @@ export default function UCDInteractiveBuild() {
 
         if (renderIdRef.current === currentRenderId && diagramRef.current) {
           diagramRef.current.innerHTML = svg;
-          // Make SVG responsive and LARGE
           const svgEl = diagramRef.current.querySelector('svg');
           if (svgEl) {
             svgEl.style.width = '100%';
-            svgEl.style.height = '100%';
+            svgEl.style.height = 'auto';
             svgEl.style.minHeight = '500px';
-            svgEl.style.maxHeight = '650px';
           }
         }
       } catch (e) {
@@ -288,7 +284,6 @@ export default function UCDInteractiveBuild() {
     render();
   }, [step]);
 
-  // Auto-play
   useEffect(() => {
     if (!playing) return;
     if (step >= totalSteps - 1) { setPlaying(false); return; }
@@ -298,17 +293,46 @@ export default function UCDInteractiveBuild() {
 
   const next = useCallback(() => { if (step < totalSteps - 1) setStep(s => s + 1); }, [step, totalSteps]);
   const prev = useCallback(() => { if (step > 0) setStep(s => s - 1); }, [step]);
-  const reset = useCallback(() => { setStep(0); setPlaying(false); }, []);
+  const reset = useCallback(() => { setStep(0); setPlaying(false); setZoom(1); setOffset({x:0, y:0}); }, []);
   const togglePlay = useCallback(() => {
     if (step >= totalSteps - 1) { setStep(0); setPlaying(true); }
     else setPlaying(p => !p);
   }, [step, totalSteps]);
+
+  // Zoom Handlers
+  const zoomIn = () => setZoom(z => Math.min(z + 0.2, 3));
+  const zoomOut = () => setZoom(z => {
+    const newZoom = Math.max(z - 0.2, 0.5);
+    if (newZoom <= 1) setOffset({x:0, y:0});
+    return newZoom;
+  });
+  const resetZoom = () => { setZoom(1); setOffset({x:0, y:0}); };
+
+  // Pan Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (zoom <= 1) return;
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || zoom <= 1) return;
+    setOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') next();
       else if (e.key === 'ArrowLeft') prev();
       else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+      else if (e.key === '=' || e.key === '+') zoomIn();
+      else if (e.key === '-') zoomOut();
+      else if (e.key === '0') resetZoom();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
@@ -321,12 +345,9 @@ export default function UCDInteractiveBuild() {
 
   return (
     <div className="grid grid-cols-12 gap-6">
-      {/* Left: Interactive Canvas */}
       <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 flex-1 min-h-[700px] relative overflow-hidden flex flex-col">
-
-          {/* Canvas Toolbar */}
-          <div className="p-4 border-b border-primary/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 h-[750px] relative overflow-hidden flex flex-col">
+          <div className="p-4 border-b border-primary/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50 z-10">
             <div className="flex gap-2 items-center">
               <span className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full uppercase">
                 Step {step + 1} of {totalSteps}
@@ -335,33 +356,64 @@ export default function UCDInteractiveBuild() {
                 Use Case Diagram — CampusConnect
               </span>
             </div>
-            {current.scenario && (
-              <span className="px-3 py-1 bg-primary/5 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
-                {current.scenario}
-              </span>
-            )}
+            <div className="flex items-center gap-1">
+                <button onClick={zoomOut} className="h-8 w-8 rounded-lg flex items-center justify-center text-primary/60 hover:bg-primary/5 hover:text-primary transition-all">
+                    <span className="material-symbols-outlined text-lg">zoom_out</span>
+                </button>
+                <button onClick={resetZoom} className="px-2 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-primary/40 hover:bg-primary/5 hover:text-primary transition-all uppercase tracking-tighter">
+                   {Math.round(zoom * 100)}%
+                </button>
+                <button onClick={zoomIn} className="h-8 w-8 rounded-lg flex items-center justify-center text-primary/60 hover:bg-primary/5 hover:text-primary transition-all">
+                    <span className="material-symbols-outlined text-lg">zoom_in</span>
+                </button>
+                {current.scenario && (
+                  <span className="ml-3 px-3 py-1 bg-primary/5 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
+                    {current.scenario}
+                  </span>
+                )}
+            </div>
           </div>
 
-          {/* Mermaid Diagram */}
-          <div className="flex-1 p-4 relative overflow-auto flex items-center justify-center bg-white">
+          <div 
+            ref={containerRef}
+            className={`flex-1 p-4 relative overflow-hidden flex items-center justify-center bg-white cursor-${zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
             {renderError ? (
               <div className="text-red-500 text-sm p-4 bg-red-50 rounded-xl max-w-md text-center">
                 <span className="material-symbols-outlined block text-2xl mb-2">error</span>
-                Diagram render error — check console for details.
+                Diagram render error.
               </div>
             ) : (
-              <div ref={diagramRef} className="w-full flex items-center justify-center" />
+              <div 
+                ref={diagramRef} 
+                className="w-full h-full flex items-center justify-center transition-transform duration-200 ease-out origin-center"
+                style={{ 
+                    transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
+                }}
+              />
+            )}
+            
+            {zoom > 1 && (
+                <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-primary/90 text-white text-[10px] font-bold rounded-full shadow-lg backdrop-blur-sm pointer-events-none animate-in fade-in slide-in-from-bottom-2">
+                    <span className="flex items-center gap-1">
+                        <span className="material-symbols-outlined text-xs">pan_tool</span>
+                        Click and drag to pan
+                    </span>
+                </div>
             )}
           </div>
 
-          {/* Playback Controller */}
-          <div className="p-5 border-t border-primary/10 bg-white dark:bg-slate-900">
+          <div className="p-5 border-t border-primary/10 bg-white dark:bg-slate-900 z-10">
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <button onClick={togglePlay}
                     className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all shadow-lg">
-                    <span className="material-symbols-outlined">{playing ? 'pause' : 'play_arrow'}</span>
+                    <span className="material-symbols-outlined font-filled">{playing ? 'pause' : 'play_arrow'}</span>
                   </button>
                   <button onClick={reset}
                     className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-all">
@@ -369,7 +421,7 @@ export default function UCDInteractiveBuild() {
                   </button>
                   <div className="ml-2">
                     <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">Current Step</p>
-                    <p className="text-primary font-bold text-sm">{current.title}</p>
+                    <p className="text-primary font-bold text-sm leading-tight">{current.title}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -385,8 +437,6 @@ export default function UCDInteractiveBuild() {
                   </button>
                 </div>
               </div>
-
-              {/* Timeline */}
               <div className="relative pt-2 pb-2">
                 <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden">
                   <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
@@ -394,8 +444,7 @@ export default function UCDInteractiveBuild() {
                 <div className="absolute top-1.5 left-0 w-full flex justify-between px-0.5">
                   {UCD_STEPS.map((_, i) => (
                     <button key={i} onClick={() => { setStep(i); setPlaying(false); }}
-                      className={`h-2 w-2 rounded-full ring-2 ring-white dark:ring-slate-900 transition-all cursor-pointer ${i <= step ? 'bg-primary' : 'bg-slate-300'} ${i === step ? 'scale-125' : ''}`}
-                      title={`Step ${i + 1}: ${UCD_STEPS[i].title}`} />
+                      className={`h-2 w-2 rounded-full ring-2 ring-white dark:ring-slate-900 transition-all cursor-pointer ${i <= step ? 'bg-primary' : 'bg-slate-300'} ${i === step ? 'scale-125' : ''}`} />
                   ))}
                 </div>
               </div>
@@ -404,9 +453,7 @@ export default function UCDInteractiveBuild() {
         </div>
       </div>
 
-      {/* Right: Explainer & Build Progress */}
       <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
-        {/* Step Explainer */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-primary dark:text-slate-100">
             <span className="material-symbols-outlined text-accent">lightbulb</span>
@@ -415,24 +462,23 @@ export default function UCDInteractiveBuild() {
           <div className="space-y-4">
             <div>
               <p className="text-xs font-bold text-accent uppercase tracking-widest mb-1">{current.subtitle}</p>
-              <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 font-medium">
                 {current.explanation}
               </p>
             </div>
             <div className="p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
               <p className="text-xs font-bold text-primary mb-1 uppercase tracking-tighter">Pro-Tip</p>
-              <p className="text-xs text-primary/80 italic">{current.proTip}</p>
+              <p className="text-xs text-primary/80 italic leading-relaxed">{current.proTip}</p>
             </div>
           </div>
         </div>
 
-        {/* Build Progress Checklist */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-primary dark:text-slate-100">
             <span className="material-symbols-outlined text-accent">checklist</span>
             <h3 className="font-bold text-lg">Build Progress</h3>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             {[
               { label: 'System Boundary', showAt: 1, icon: 'crop_square' },
               { label: 'Primary Actors (3)', showAt: 2, icon: 'person' },
@@ -448,18 +494,17 @@ export default function UCDInteractiveBuild() {
               { label: 'Final Review', showAt: 12, icon: 'verified' },
             ].map((item) => (
               <div key={item.showAt}
-                className={`flex items-center gap-3 p-2.5 rounded-xl transition-all text-sm ${
+                className={`flex items-center gap-3 p-2 rounded-xl transition-all text-sm ${
                   isNew(item.showAt)
                     ? 'bg-accent/10 border-2 border-accent ring-2 ring-accent/10 font-bold text-primary'
                     : s(item.showAt)
                     ? 'bg-slate-50 dark:bg-slate-800 text-primary dark:text-slate-200'
                     : 'text-slate-400 opacity-50'
                 }`}>
-                <span className={`material-symbols-outlined text-[18px] ${s(item.showAt) ? 'text-accent' : 'text-slate-300'}`}>
+                <span className={`material-symbols-outlined text-[16px] ${s(item.showAt) ? 'text-accent' : 'text-slate-300'}`}>
                   {s(item.showAt) ? 'check_circle' : 'circle'}
                 </span>
-                <span className="material-symbols-outlined text-[16px] text-primary/40">{item.icon}</span>
-                <span className="text-xs">{item.label}</span>
+                <span className="text-[11px] font-bold truncate flex-1">{item.label}</span>
               </div>
             ))}
           </div>
