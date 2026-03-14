@@ -1,9 +1,22 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
+import UCDInteractiveBuild from '@/components/ucd-interactive-build';
+
+const DIAGRAM_TITLES: Record<string, string> = {
+  ucd: 'Use Case Diagram',
+  dmd: 'Domain Model Diagram',
+  ssd: 'System Sequence Diagram',
+  sd:  'Sequence Diagram',
+  dcd: 'Design Class Diagram',
+};
 
 export default function DiagramModule() {
+  const params = useParams();
+  const diagramType = typeof params?.type === 'string' ? params.type : 'ucd';
+  const diagramTitle = DIAGRAM_TITLES[diagramType] ?? 'Diagram Module';
   const [activeTab, setActiveTab] = useState<'purpose' | 'build' | 'quiz'>('build');
 
   return (
@@ -18,7 +31,7 @@ export default function DiagramModule() {
           <div className="mb-8">
             <div className="flex flex-col gap-1 mb-6">
               <h1 className="text-3xl font-bold text-primary dark:text-slate-100">Multi-Modal Learning Module</h1>
-              <p className="text-primary/60 dark:text-slate-400 font-medium">Sequence Diagram Construction</p>
+              <p className="text-primary/60 dark:text-slate-400 font-medium">{diagramTitle} Construction</p>
             </div>
             <div className="flex border-b border-primary/10 gap-8">
               <button
@@ -558,164 +571,7 @@ export default function DiagramModule() {
           )}
           {/* ===== INTERACTIVE BUILD TAB ===== */}
           {activeTab === 'build' && (
-            <div className="grid grid-cols-12 gap-6">
-
-              {/* Left: Interactive Canvas */}
-              <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 flex-1 min-h-[500px] relative overflow-hidden flex flex-col">
-
-                  {/* Canvas Toolbar */}
-                  <div className="p-4 border-b border-primary/5 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-                    <div className="flex gap-2">
-                      <span className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full uppercase">Step 3 of 12</span>
-                      <span className="text-primary/40 text-xs font-medium uppercase tracking-widest px-1">Interactive Editor</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <button className="p-1.5 rounded-lg hover:bg-primary/5 text-primary/60"><span className="material-symbols-outlined text-[20px]">zoom_in</span></button>
-                      <button className="p-1.5 rounded-lg hover:bg-primary/5 text-primary/60"><span className="material-symbols-outlined text-[20px]">zoom_out</span></button>
-                      <button className="p-1.5 rounded-lg hover:bg-primary/5 text-primary/60"><span className="material-symbols-outlined text-[20px]">fullscreen</span></button>
-                    </div>
-                  </div>
-
-                  {/* Diagram Content */}
-                  <div className="flex-1 p-8 relative overflow-auto">
-                    <div className="flex justify-around items-start min-w-[600px] h-full">
-                      {/* Lifeline 1 */}
-                      <div className="flex flex-col items-center">
-                        <div className="px-6 py-3 bg-primary text-white rounded-lg font-bold shadow-md z-10 border-2 border-primary">UI Controller</div>
-                        <div className="border-l-2 border-dashed border-primary h-80 opacity-20"></div>
-                      </div>
-                      {/* Lifeline 2 */}
-                      <div className="flex flex-col items-center relative">
-                        <div className="px-6 py-3 bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg font-bold shadow-md z-10 border-2 border-primary">Event Manager</div>
-                        <div className="border-l-2 border-dashed border-primary h-80 relative">
-                          {/* Interaction Arrows */}
-                          <div className="absolute top-10 -left-[160px] w-[160px] h-[2px] bg-primary group">
-                            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary whitespace-nowrap">1. checkCapacity(eventID)</span>
-                            <div className="absolute -right-2 -top-[5px] border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-primary"></div>
-                          </div>
-                          <div className="absolute top-24 -left-[160px] w-[160px] h-[2px] bg-primary/40 border-t border-dashed border-primary/40">
-                            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary/40 whitespace-nowrap">2. status: Available</span>
-                          </div>
-                          {/* Active State Highlight */}
-                          <div className="absolute top-40 -left-[160px] w-[160px] h-12 bg-accent/10 border-2 border-accent border-dashed rounded-lg flex items-center justify-center">
-                            <span className="text-[10px] font-bold text-accent px-2 text-center leading-tight">3. Logic: validateCapacity()</span>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Lifeline 3 */}
-                      <div className="flex flex-col items-center">
-                        <div className="px-6 py-3 bg-white dark:bg-slate-800 text-primary dark:text-white rounded-lg font-bold shadow-md z-10 border-2 border-primary">Database</div>
-                        <div className="border-l-2 border-dashed border-primary h-80 opacity-20"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Playback Controller */}
-                  <div className="p-6 border-t border-primary/10 bg-white dark:bg-slate-900">
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <button className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all shadow-lg">
-                            <span className="material-symbols-outlined">play_arrow</span>
-                          </button>
-                          <button className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-all">
-                            <span className="material-symbols-outlined text-[18px]">replay</span>
-                          </button>
-                          <div className="ml-2">
-                            <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">Current Action</p>
-                            <p className="text-primary font-bold">Step 3: Event capacity check</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <span className="text-xs font-bold text-primary/60">03 / 12</span>
-                          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 transition-all shadow-sm">
-                            Next Step
-                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Timeline Slider */}
-                      <div className="relative pt-2 pb-4">
-                        <div className="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden flex">
-                          <div className="h-full bg-primary w-[25%] transition-all"></div>
-                        </div>
-                        {/* Step Markers */}
-                        <div className="absolute top-1.5 left-0 w-full flex justify-between px-1">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                          <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ring-4 ring-white dark:ring-slate-900 -mt-[1px]"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* Right: Explainer & Traceability */}
-              <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
-                {/* Contextual Explainer */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-primary dark:text-slate-100">
-                    <span className="material-symbols-outlined text-accent">lightbulb</span>
-                    <h3 className="font-bold text-lg">Contextual Explainer</h3>
-                  </div>
-                  <div className="space-y-4">
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                      The <span className="font-bold text-primary dark:text-slate-200">checkCapacity()</span> method is triggered when the UI Controller receives a registration request. This asynchronous call ensures the system doesn&apos;t block while waiting for a response from the Event Manager.
-                    </p>
-                    <div className="p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
-                      <p className="text-xs font-bold text-primary mb-1 uppercase tracking-tighter">Pro-Tip</p>
-                      <p className="text-xs text-primary/80 italic">Sequence diagrams focus on the order of messages between objects, rather than the internal logic of the objects themselves.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Traceability List */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-primary/5 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-primary dark:text-slate-100">
-                    <span className="material-symbols-outlined text-accent">link</span>
-                    <h3 className="font-bold text-lg">Traceability List</h3>
-                  </div>
-                  <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">DCD Methods Mapping</p>
-                  <div className="flex flex-col gap-3">
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between border border-transparent hover:border-accent/30 transition-all cursor-default">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-slate-400">EventManager.java</span>
-                        <span className="text-sm font-semibold text-primary dark:text-slate-200">validateCapacity()</span>
-                      </div>
-                      <span className="material-symbols-outlined text-accent text-[20px] fill-1">check_circle</span>
-                    </div>
-                    <div className="p-3 bg-accent/5 rounded-xl flex items-center justify-between border-2 border-accent transition-all ring-2 ring-accent/10">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-accent">EventManager.java</span>
-                        <span className="text-sm font-bold text-primary dark:text-slate-100">getAvailableSpots()</span>
-                      </div>
-                      <span className="px-2 py-0.5 bg-accent text-[10px] text-white font-bold rounded uppercase">Active</span>
-                    </div>
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between border border-transparent opacity-60">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-slate-400">DatabaseProxy.java</span>
-                        <span className="text-sm font-semibold text-primary dark:text-slate-200">queryEvent(id)</span>
-                      </div>
-                      <span className="material-symbols-outlined text-slate-300 text-[20px]">circle</span>
-                    </div>
-                  </div>
-                  <button className="mt-2 w-full py-2 text-xs font-bold text-primary/40 hover:text-primary transition-colors flex items-center justify-center gap-1 uppercase tracking-widest">
-                    View Detailed Class Diagram
-                    <span className="material-symbols-outlined text-xs">open_in_new</span>
-                  </button>
-                </div>
-              </div>
-
-            </div>
+            <UCDInteractiveBuild />
           )}
 
           {/* ===== QUIZ TAB ===== */}
