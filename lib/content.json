@@ -1,0 +1,43 @@
+{
+  "scenarios": {
+    "1": {
+      "title": "Scenario 1: Student browsing clubs",
+      "text": "..."
+    },
+    "2": {
+      "title": "Scenario 2: Daniel creating an event & RSVP Logic",
+      "text": "..."
+    },
+    "3": {
+      "title": "Scenario 3: Priya checking events",
+      "text": "..."
+    }
+  },
+  "diagrams": {
+    "ucd": {
+      "name": "Use Case Diagram",
+      "purpose": "Show actors and their actions",
+      "blurb": "..."
+    },
+    "dmd": {
+      "name": "Domain Model Diagram",
+      "purpose": "Show conceptual classes and relationships",
+      "blurb": "..."
+    },
+    "ssd": {
+      "name": "System Sequence Diagram",
+      "purpose": "Show external interactions (Scenario 3)",
+      "blurb": "..."
+    },
+    "sd": {
+      "name": "Sequence Diagram",
+      "purpose": "Show internal logic (Scenario 2)",
+      "blurb": "..."
+    },
+    "dcd": {
+      "name": "Domain Class Diagram",
+      "purpose": "Show attributes and methods",
+      "blurb": "..."
+    }
+  }
+}
