@@ -75,13 +75,14 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
   const cfg = statusConfig[status];
   const circum = 2 * Math.PI * 15.9155;
   const dashArr = `${(pct / 100) * circum} ${circum}`;
+  const { count, ref } = useCountUp(pct);
 
   return (
     <motion.div
       variants={fadeUp}
       transition={{ duration: 0.5, delay }}
       whileHover={status !== 'locked' ? { y: -6, scale: 1.03, boxShadow: '0 20px 40px rgba(0,48,87,0.15)' } : {}}
-      className={`bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 cursor-default select-none ${status === 'locked' ? 'opacity-55' : ''}`}
+      className={`bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 cursor-default select-none transition-colors ${status === 'locked' ? 'opacity-55' : 'hover:border-primary/30'}`}
     >
       <div className="flex justify-between items-start mb-4">
         <div className="relative h-12 w-12 flex items-center justify-center">
@@ -98,11 +99,11 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
               transition={{ duration: 1.2, delay: delay + 0.2, ease: 'easeOut' }}
             />
           </svg>
-          <span className="text-[10px] font-bold">{pct}%</span>
+          <div ref={ref} className="text-[10px] font-bold">{count}%</div>
         </div>
-        <span className={`px-2 py-1 ${cfg.bg} ${cfg.text} text-[10px] font-bold rounded-lg`}>{cfg.badge}</span>
+        <span className={`px-2 py-1 ${cfg.bg} ${cfg.text} text-[10px] font-bold rounded-lg uppercase tracking-tight`}>{cfg.badge}</span>
       </div>
-      <h4 className="font-bold text-slate-900 dark:text-white">{label}</h4>
+      <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">{label}</h4>
       <p className="text-xs text-slate-500">{subtitle}</p>
     </motion.div>
   );
@@ -183,7 +184,11 @@ export default function Dashboard() {
               className="p-2.5 rounded-xl bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm hover:shadow-md transition-all border border-slate-100 dark:border-slate-700 relative"
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent border-2 border-white"></span>
+              <motion.span 
+                className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent border-2 border-white dark:border-slate-800"
+                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
             </motion.button>
             <motion.div
               whileHover={{ scale: 1.05 }}
