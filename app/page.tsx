@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import AppSidebar from '@/components/app-sidebar';
 import {
   Dialog,
   DialogContent,
@@ -19,58 +20,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
-      {/* SideNavBar */}
-      <aside className="w-64 bg-primary text-white flex flex-col justify-between p-6 shrink-0">
-        <div className="flex flex-col gap-8">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-primary">
-              <span className="material-symbols-outlined font-bold">account_tree</span>
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-white text-lg font-bold leading-none">UMLogic</h1>
-              <p className="text-white/60 text-xs font-medium">Object &amp; Design</p>
-            </div>
-          </div>
-          <nav className="flex flex-col gap-2">
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white" href="#">
-              <span className="material-symbols-outlined">dashboard</span>
-              <span className="text-sm font-medium">Dashboard</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
-              <span className="material-symbols-outlined">database</span>
-              <span className="text-sm font-medium">Models</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
-              <span className="material-symbols-outlined">list_alt</span>
-              <span className="text-sm font-medium">Requirements</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
-              <span className="material-symbols-outlined">account_tree</span>
-              <span className="text-sm font-medium">Architecture</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
-              <span className="material-symbols-outlined">play_circle</span>
-              <span className="text-sm font-medium">Execution</span>
-            </a>
-          </nav>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <p className="text-xs text-white/50 mb-2 uppercase tracking-wider font-bold">Current Level</p>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-accent">Lvl 4: Architect</span>
-              <span className="text-xs text-white/50">84%</span>
-            </div>
-            <div className="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div className="bg-accent h-full w-[84%]"></div>
-            </div>
-          </div>
-          <button className="w-full py-3 px-4 bg-accent text-primary font-bold rounded-xl text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-            <span className="material-symbols-outlined text-sm">add</span>
-            New Project
-          </button>
-        </div>
-      </aside>
+      {/* Shared Sidebar */}
+      <AppSidebar onSettings={() => setSettingsOpen(true)} />
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-8">

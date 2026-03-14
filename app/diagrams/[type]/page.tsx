@@ -1,36 +1,14 @@
 "use client";
 
 import React, { useState } from 'react';
+import AppSidebar from '@/components/app-sidebar';
 
 export default function DiagramModule() {
   const [activeTab, setActiveTab] = useState<'purpose' | 'build' | 'quiz'>('build');
 
   return (
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
-      {/* SideNavBar - Preserved from Dashboard */}
-      <aside className="w-64 bg-primary text-white flex flex-col justify-between p-6 shrink-0">
-        <div className="flex flex-col gap-8">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-primary">
-              <span className="material-symbols-outlined font-bold">account_tree</span>
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-white text-lg font-bold leading-none">UMLogic</h1>
-              <p className="text-white/60 text-xs font-medium">Object &amp; Design</p>
-            </div>
-          </div>
-          <nav className="flex flex-col gap-2">
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="/">
-              <span className="material-symbols-outlined">dashboard</span>
-              <span className="text-sm font-medium">Dashboard</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white" href="#">
-              <span className="material-symbols-outlined">database</span>
-              <span className="text-sm font-medium">Models</span>
-            </a>
-          </nav>
-        </div>
-      </aside>
+      <AppSidebar />
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-8 relative">
