@@ -417,7 +417,7 @@ export default function LandingPage() {
               <StaggerContainer className="space-y-10">
                 {[
                   { icon: 'code', title: 'Professional IDE', desc: 'A feature-rich Mermaid editor with live preview, integrated linting, and OOD best-practice hints.' },
-                  { icon: 'bolt', title: '2340 Templates', desc: 'Load pre-built CS 2340 diagram templates — Factory, Singleton, Observer, and more — with one click.' },
+                  { icon: 'bolt', title: 'Smart Templates', desc: 'Load pre-built industry-standard diagram templates — Factory, Singleton, Observer, and more — with one click.' },
                   { icon: 'bug_report', title: 'Visual Debugging', desc: 'Step through sequence diagrams frame by frame and watch the traceability list update in real-time.' },
                 ].map((item) => (
                   <motion.div key={item.title} variants={staggerChild} className="flex gap-6">
@@ -459,7 +459,7 @@ export default function LandingPage() {
               Supported <span className="text-[#B3A369]">Diagram Modules</span>
             </h2>
             <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-              Master the essential structural and behavioral diagrams required for successful software design in CS 2340.
+              Master the essential structural and behavioral diagrams required for successful software design.
             </p>
           </div>
         </Reveal>
@@ -502,7 +502,7 @@ export default function LandingPage() {
               Ready to evolve your <span className="text-[#B3A369]">Architecture?</span>
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto mb-12 text-lg relative z-10">
-              Join CS 2340 students mastering the next generation of software design patterns with UMLogic. Free access for all current GT students.
+              Join students and designers mastering the next generation of software design patterns with UMLogic. Open to all learners.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
               <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
@@ -524,9 +524,9 @@ export default function LandingPage() {
       <Reveal>
         <footer className="py-8 px-6 lg:px-20 border-t border-slate-200 bg-white">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-slate-500 text-sm font-medium">UMLogic — Built for CS 2340.</p>
+            <p className="text-slate-500 text-sm font-medium">UMLogic — Learn Software Design.</p>
             <div className="flex gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
-              <a className="hover:text-[#B3A369] transition-colors" href="https://syllabus.gatech.edu/syllabi/2340/a" target="_blank" rel="noopener noreferrer">CS 2340</a>
+              <a className="hover:text-[#B3A369] transition-colors" href="https://syllabus.gatech.edu/syllabi/2340/a" target="_blank" rel="noopener noreferrer">Syllabus</a>
               <a className="hover:text-[#B3A369] transition-colors" href="https://github.com/AAsteriskz7/umlogic" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
           </div>

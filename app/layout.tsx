@@ -9,7 +9,7 @@ const lexend = Lexend({
 
 export const metadata: Metadata = {
   title: "UMLogic | Learn UML Diagramming",
-  description: "Mastering UML for CS 2340",
+  description: "Mastering UML and Software Design",
 };
 
 export default function RootLayout({

@@ -4,7 +4,7 @@
 Visit the live application: **[umlogic.vercel.app](https://umlogic.vercel.app)** 
 
 ## Overview
-UMLogic is a premium, interactive learning platform designed specifically for Georgia Tech's **CS 2340 (Objects and Design)** curriculum. It bridges the gap between theoretical software architecture and practical implementation through multi-modal learning modules.
+UMLogic is a premium, interactive learning platform designed for students and professionals mastering **Software Objects and Design**. It bridges the gap between theoretical software architecture and practical implementation through multi-modal learning modules.
 
 ![UMLogic Dashboard](/public/hero-viz.png)
 
@@ -44,8 +44,8 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## 📚 Project Context
-Developed for the **CS 2340 Hackathon**, UMLogic focuses on making the transition from "System Logic" to "Software Design" intuitive and visually engaging.
+Developed to make the transition from "System Logic" to "Software Design" intuitive and visually engaging for students and early-career developers.
 
 ---
-*UMLogic is not an official Georgia Tech product but is built by students, for students.*
+*UMLogic is an independent educational project built by students, for the software community.*
 
