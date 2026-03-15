@@ -177,6 +177,23 @@ export default function Dashboard() {
 
   const currentModule = allModules.find(m => m.pct < 100) || allModules[0];
   const moduleIndex = allModules.indexOf(currentModule) + 1;
+  const lastLocation = (() => {
+    try {
+      const saved = localStorage.getItem('umlogic_last_location');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const resumeTarget =
+    typeof lastLocation?.moduleId === 'string'
+      ? allModules.find((m) => m.id === lastLocation.moduleId) || currentModule
+      : currentModule;
+  const resumeTab =
+    lastLocation?.tab === 'info' || lastLocation?.tab === 'build' || lastLocation?.tab === 'quiz'
+      ? lastLocation.tab
+      : 'info';
+  const resumeModuleIndex = allModules.indexOf(resumeTarget) + 1;
 
   const handleClearStorage = () => {
     localStorage.clear();
@@ -185,6 +202,32 @@ export default function Dashboard() {
 
   // Determine which tab to navigate to based on module completion
   const handleResumeModule = () => {
+    if (lastLocation) {
+      try {
+        const lastModuleId = lastLocation?.moduleId;
+        const lastTab = lastLocation?.tab;
+
+        if (lastModuleId === 'finalExam') {
+          router.push('/cumulative-quiz');
+          return;
+        }
+
+        if (
+          typeof lastModuleId === 'string' &&
+          ['ucd', 'dmd', 'ssd', 'sd', 'dcd'].includes(lastModuleId)
+        ) {
+          const tabQuery =
+            lastTab === 'info' || lastTab === 'build' || lastTab === 'quiz'
+              ? `?tab=${lastTab}`
+              : '';
+          router.push(`/diagrams/${lastModuleId}${tabQuery}`);
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to read last module location', error);
+      }
+    }
+
     const moduleId = currentModule.id;
     if (moduleId === 'finalExam') {
       router.push('/cumulative-quiz');
@@ -265,7 +308,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
               >
-                {currentModule.pct === 0 ? "Start Learning" : "Continue Learning"}
+                {resumeTarget.pct === 0 ? "Start Learning" : "Continue Learning"}
               </motion.span>
               <motion.h2
                 className="text-white text-4xl font-black mb-3"
@@ -273,7 +316,7 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.45 }}
               >
-                Module {moduleIndex}: {currentModule.subtitle}
+                Module {resumeModuleIndex}: {resumeTarget.subtitle}
               </motion.h2>
               <motion.p
                 className="text-white/80 text-base mb-6 font-medium"
@@ -281,9 +324,9 @@ export default function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 }}
               >
-                {currentModule.id === 'ucd' ? "Master actors and system boundaries." :
-                  currentModule.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
-                    currentModule.id === 'finalExam' ? "Test your knowledge across all diagrams in the ultimate quiz." :
+                {resumeTarget.id === 'ucd' ? "Master actors and system boundaries." :
+                  resumeTarget.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
+                    resumeTarget.id === 'finalExam' ? "Test your knowledge across all diagrams in the ultimate quiz." :
                       "Deep dive into the internal logic and consistency of CampusConnect."}
               </motion.p>
               <div className="flex gap-4">
@@ -297,7 +340,7 @@ export default function Dashboard() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  {currentModule.pct === 0 ? "Start Module" : "Resume Module"}
+                  {resumeTarget.pct === 0 ? "Start Module" : "Resume Module"}
                   <motion.span
                     className="material-symbols-outlined text-[16px]"
                     initial={{ x: 0 }}
