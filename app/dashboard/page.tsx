@@ -186,34 +186,12 @@ export default function Dashboard() {
   // Determine which tab to navigate to based on module completion
   const handleResumeModule = () => {
     const moduleId = currentModule.id;
-    const p = progress[moduleId];
-    
-    // If module not started, go to purpose (first tab)
-    if (!p || currentModule.pct === 0) {
-      router.push(`/${moduleId}`);
+    if (moduleId === 'finalExam') {
+      router.push('/cumulative-quiz');
       return;
     }
-    
-    // If purpose incomplete, go to purpose tab
-    if (!p.purpose) {
-      router.push(`/${moduleId}`);
-      return;
-    }
-    
-    // If builder incomplete, go to builder tab (interactive build)
-    if (!p.builder) {
-      router.push(`/${moduleId}?tab=builder`);
-      return;
-    }
-    
-    // If quiz incomplete or not 100%, go to quiz tab
-    if (p.quiz < 100) {
-      router.push(`/${moduleId}?tab=quiz`);
-      return;
-    }
-    
-    // Module complete, go to purpose by default
-    router.push(`/${moduleId}`);
+
+    router.push(`/diagrams/${moduleId}`);
   };
 
   return (
