@@ -41,19 +41,23 @@ const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' |
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Fundamentals</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Purpose of a Use Case Diagram</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          <span className="font-bold text-primary dark:text-slate-200">Use Cases</span> are text stories used to discover and record functional requirements. They describe interactions between users and a subject (the System under Development (SuD)).
+          A <span className="font-bold text-primary dark:text-slate-200">Use Case Diagram (UCD)</span> helps students answer the biggest early design question:
+          <span className="font-bold"> what should the system do for its users?</span> Instead of jumping straight into classes, methods, or databases, a UCD focuses on goals, people, and system behavior.
+        </p>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          For CampusConnect, the UCD gives us the high-level map of the product. It shows who interacts with the system, what they are trying to accomplish, and which behaviors are required before we ever draw an SSD, SD, DMD, or DCD.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { term: 'Primary Actor', desc: 'Has user goals fulfilled through using services of the SuD. Typically drawn on the left.' },
-            { term: 'Supporting Actor', desc: 'Provides a service (like a database or admin approval) to the SuD. Typically drawn on the right.' },
-            { term: 'Offstage Actor', desc: 'A stakeholder with an interest in the behavior but no direct interaction. Drawn at the bottom.' },
-            { term: 'Scenario', desc: 'A specific sequence of interactions between actors and the system.' },
+            { term: 'Start with Goals', desc: 'Use a UCD when you want to identify what the system must provide to users before worrying about implementation.' },
+            { term: 'Keep It High-Level', desc: 'A UCD is about user intentions and system responsibilities, not methods, UI widgets, or database tables.' },
+            { term: 'Use It Early', desc: 'This is usually one of the first diagrams built because it sets the scope for the rest of the project.' },
+            { term: 'Think in Scenarios', desc: 'Scenario 1, 2, and 3 help us discover which actors and use cases belong in CampusConnect.' },
           ].map((item) => (
             <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
               <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
@@ -67,22 +71,42 @@ const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' |
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
       <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
         <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
-          <span className="material-symbols-outlined text-accent text-[18px]">swap_horiz</span>
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Relationships</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How to Read the Main Parts</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Before building the CampusConnect UCD, students should be comfortable reading its basic pieces. These parts are what make the diagram useful and what help us stay consistent with the official UML guidance from class.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Actor', desc: 'An actor is something with behavior, such as a person or external system. Actors are named with nouns like Student, President, Officer, or External Authentication System.' },
+            { term: 'Use Case', desc: 'A use case is a goal the actor wants the system to support. Use cases should be named with verb phrases like "Login to System" or "Submit Membership Request".' },
+            { term: 'System Boundary', desc: 'The system boundary shows what is inside CampusConnect and what is outside of it. Everything inside is functionality the system provides.' },
+            { term: 'Association', desc: 'A plain line between an actor and a use case shows that the actor participates in that behavior.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="p-5 rounded-xl border-2 border-primary/10 bg-primary/5">
             <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-bold rounded uppercase font-mono">&lt;&lt;include&gt;&gt;</span>
-            <p className="text-xs text-slate-600 mt-3">Mandatory behavior used by several use cases. Arrow points <span className="font-bold">TO</span> the child use case.</p>
+            <p className="text-xs text-slate-600 mt-3">
+              Use this when one use case <span className="font-bold">always depends on another use case</span>. The dashed arrow points <span className="font-bold">to the included child use case</span>.
+            </p>
           </div>
           <div className="p-5 rounded-xl border-2 border-accent/10 bg-accent/5">
             <span className="px-2 py-0.5 bg-accent text-white text-[10px] font-bold rounded uppercase font-mono">&lt;&lt;extend&gt;&gt;</span>
-            <p className="text-xs text-slate-600 mt-3">Optional/conditional behavior or exceptions. Arrow points <span className="font-bold">TO</span> the base use case.</p>
+            <p className="text-xs text-slate-600 mt-3">
+              Use this for <span className="font-bold">optional or conditional behavior</span>. The dashed arrow points <span className="font-bold">to the base use case being extended</span>.
+            </p>
           </div>
         </div>
       </div>
@@ -91,20 +115,67 @@ const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' |
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
       <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
         <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
-          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
+          <span className="material-symbols-outlined text-accent text-[18px]">construction</span>
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">CampusConnect - Join Organization</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How We Build the CampusConnect UCD</h2>
         </div>
       </div>
-      <div className="p-8 flex flex-col gap-4">
-        <p className="text-sm text-slate-600 italic leading-relaxed">
-          &ldquo;A student joins an organization. The system validates their status. If approval is needed, an administrator is notified.&rdquo;
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          For this project, the UCD is based on <span className="font-bold text-primary">Scenarios 1, 2, and 3</span>. That means we are not building a diagram for one tiny action. We are building a high-level map of the most important user goals across the CampusConnect system.
         </p>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            { step: 'Step 1', title: 'Identify the actors', desc: 'From the scenarios, we identify Student, President, and Officer as primary actors. The university external authentication system acts as a supporting actor.' },
+            { step: 'Step 2', title: 'Define the system boundary', desc: 'We draw CampusConnect as the system under discussion so we can separate internal functionality from outside participants.' },
+            { step: 'Step 3', title: 'List actor goals as use cases', desc: 'Examples include Login to System, Search for Organization, Submit Membership Request, Review Membership Request, Create Event, View Profile / Upcoming Events, and RSVP to Event.' },
+            { step: 'Step 4', title: 'Add associations and special relationships', desc: 'We connect actors to the use cases they participate in, then use <<include>> and <<extend>> where the scenarios clearly show always-required or optional behavior.' },
+            { step: 'Step 5', title: 'Check against the scenarios', desc: 'Every major action in Scenarios 1, 2, and 3 should be accounted for, and the wording should stay focused on user goals instead of implementation details.' },
+          ].map((item) => (
+            <div key={item.step} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-wider">{item.step}</span>
+                <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
         <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
            <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
            <p className="text-xs font-bold text-slate-400">UCD_CampusConnect_JoinOrg.png</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How the UCD Connects to the Other Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          The UCD is the starting point for traceability. It tells us <span className="font-bold">which behaviors matter</span>, and the later diagrams explain those behaviors in more detail from different perspectives.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'UCD -> SSD', desc: 'A use case like viewing profile and event information can become a System Sequence Diagram that shows actor-to-system events for one scenario.' },
+            { term: 'UCD -> SD', desc: 'A use case like creating an event or RSVP logic can be expanded into a Sequence Diagram that shows internal object interactions.' },
+            { term: 'UCD -> DMD', desc: 'The actors and system goals help us discover important domain concepts such as Student, Organization, Event, RSVP, and MembershipRequest.' },
+            { term: 'UCD -> DCD', desc: 'Once we know the key system behaviors, we can define the software classes and methods needed to support them in the Design Class Diagram.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
         </div>
 
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
