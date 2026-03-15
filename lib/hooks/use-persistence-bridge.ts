@@ -17,9 +17,28 @@ export function usePersistenceBridge() {
     // Simulate network latency
     await new Promise(resolve => setTimeout(resolve, 1200));
     
-    // TODO: Team Member - Implement retry logic with exponential backoff
-    const success = Math.random() > 0.1; // 90% success rate simulation
-    
+    let success = Math.random() > 0.1; // 90% success rate simulation
+    let retries = 0;
+    const maxRetries = 5;
+    let delay = 1000; // Start with 1 second
+
+    while (!success && retries < maxRetries) {
+      retries++;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      // Simulate another sync attempt
+      success = Math.random() > 0.1;
+      if (success) {
+        console.log(`[Bridge] Retry ${retries}: Sync successful.`);
+        break;
+      } else {
+        console.error(`[Bridge] Retry ${retries}: Sync failed. Retrying...`);
+        delay *= 2; // Exponential backoff
+      }
+    }
+    if (!success && retries === maxRetries) {
+      console.error("[Bridge] All retries failed. Please check your connection or try again later.");
+    }
+
     if (success) {
       console.log(`[Bridge] Successfully synced ${Object.keys(progressData).length} modules.`);
     } else {
