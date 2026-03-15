@@ -80,7 +80,7 @@ export default function LandingPage() {
             <span className="text-xl font-black tracking-tighter uppercase text-primary">UMLogic</span>
           </motion.div>
           <div className="hidden md:flex items-center gap-10 text-sm font-medium text-slate-600">
-            {['Active Learning', 'Sandbox', 'Testimonials'].map((item) => (
+            {['Active Learning', 'Sandbox', 'Diagram Modules'].map((item) => (
               <motion.a
                 key={item}
                 className="hover:text-[#B3A369] transition-colors"
@@ -246,10 +246,7 @@ export default function LandingPage() {
               Master the complexities of UML logic through our adaptive challenge system. It&apos;s not just a course — it&apos;s a structural evolution.
             </p>
           </Reveal>
-          <Reveal className="text-right" delay={0.15}>
-            <div className="text-[#B3A369] font-bold text-4xl mb-1">98%</div>
-            <div className="text-slate-500 text-sm uppercase tracking-widest font-bold">Retention Rate</div>
-          </Reveal>
+
         </div>
 
         <StaggerContainer className="grid md:grid-cols-3 gap-8">
@@ -454,52 +451,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Testimonials ────────────────────────────────────── */}
-      <section className="py-32 px-6 lg:px-20 max-w-7xl mx-auto" id="testimonials">
+      {/* ── Diagram Modules Section ───────────────────────────── */}
+      <section className="py-32 px-6 lg:px-20 max-w-7xl mx-auto border-t border-[#B3A369]/10" id="diagram-modules">
         <Reveal>
-          <h2 className="text-4xl font-black mb-16 text-center text-primary">
-            Trusted by <span className="text-[#B3A369] italic tracking-tighter uppercase">GT Engineers</span>
-          </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-black mb-6 text-primary">
+              Supported <span className="text-[#B3A369]">Diagram Modules</span>
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              Master the essential structural and behavioral diagrams required for successful software design in CS 2340.
+            </p>
+          </div>
         </Reveal>
-        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {[
-            {
-              quote: "The Sandbox changed how I approach my senior design project. Seeing the UML and code side-by-side is just... chef's kiss.",
-              name: 'Alex Chen', role: 'CS Student @ GT',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBVTF_xWOLIPT0-ExwRcvU2fdYzcddPHPw1j2nDBxoaw64E2b8wb-939wmfH-1hsxxXevT0jn6hsWJd79f9hfVRy1E9qMI__w9fp7jM9F_1SJjmID5QIS8yDsPa0JJEojc90lpyLojruddfZ_3gbZi5VCX7TUvGbmtDsYq5j3Z6G0vT5Eus00HIHvn5rS2e6jcWtVmbDHA_mQvOyL6qAvV6f8V71eLCcYB6BcDm8jTOJpevIB988dPz50Vc02EOlt7NL_zUmONMeKge',
-            },
-            {
-              quote: "Finally, a logic platform that doesn't look like it was built in 1998. The interactive quizzes are actually fun and the GT gold accents are slick.",
-              name: 'Maya Rodriguez', role: 'Software Engineering',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD2KSPH4JP4M2jXRIlowaCRQ0iOjXqqXOuf3VYlFPVG8Wsy_r8hYLZbZFrlBXu6qiZYdDW62y1uN3m8NUYnLlaOKAu3aYa4Lms8jzujzXzgWerqe-i3UXHqQG9XtRItkrZeJCsGor3tz9ZqP-3wUdBX1Un3bPyDAwg-kB62HPNhBdMccEyCY1p0Tc091b1eN_2McHHIv3JjA3Yu22ugZgvlsWfah08K2VzdgEhwVAXQC59MWpcL00R2pChBvkwkucgd0p5IzJJmmhgS',
-            },
-            {
-              quote: "The feedback loop is insanely fast. I've halved my modeling time since switching to UMLogic. It's the future.",
-              name: 'Jordan Lee', role: 'Senior Architect',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwPJ9zmMgWjV-fDjxids3-leyD6bSmoJKjeGMw0eig4_U1UaBFtWBOJIwxYZHyd_AfzBrOXwr5K0z0CBm5CIRhN_k2z5D4NMsqGtNcKY1ILwWuowGrfc9Sakr8RzrE18BFpna5XB9jtTEHK7H48F4Ecb2Bi8In8dv9myGsrfTwW21VsNa2VPGT8e6FEO3bxWt64U-zWDHSDoxAWcRuncS0ztRzHd3Sq0WhlZEqfMFApMGiNwXsotGm658hFrP3kv7FKbMCYsyra4c2',
-            },
-          ].map((t) => (
+            { id: 'UCD', name: 'Use Case', icon: 'person', desc: 'Define system boundaries and actor interactions.' },
+            { id: 'DMD', name: 'Domain Model', icon: 'hub', desc: 'Map out the conceptual classes and relationships.' },
+            { id: 'SSD', name: 'System Sequence', icon: 'settings_input_composite', desc: 'Trace the flow of events across the system boundary.' },
+            { id: 'SD', name: 'Sequence', icon: 'swap_horiz', desc: 'Detail the internal object interactions and messages.' },
+            { id: 'DCD', name: 'Design Class', icon: 'account_tree', desc: 'Translate models into software classes and methods.' },
+          ].map((diag) => (
             <motion.div
-              key={t.name}
+              key={diag.id}
               variants={staggerChild}
-              className="p-8 bg-white rounded-3xl border border-slate-200 flex flex-col gap-6 relative group overflow-hidden shadow-sm"
-              whileHover={{ y: -6, boxShadow: '0 20px 50px rgba(0,48,87,0.1)' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-full items-center text-center"
+              whileHover={{ y: -4, boxShadow: '0 10px 30px rgba(0,48,87,0.08)' }}
             >
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-15 transition-opacity">
-                <span className="material-symbols-outlined text-9xl text-primary">format_quote</span>
+              <div className="h-14 w-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary mb-4">
+                <span className="material-symbols-outlined text-2xl">{diag.icon}</span>
               </div>
-              <p className="text-base text-slate-500 relative z-10 leading-relaxed italic">&ldquo;{t.quote}&rdquo;</p>
-              <div className="flex items-center gap-4 mt-auto">
-                <div
-                  className="h-12 w-12 rounded-full overflow-hidden bg-slate-200 bg-cover bg-center shrink-0"
-                  style={{ backgroundImage: `url('${t.img}')` }}
-                />
-                <div>
-                  <div className="font-bold text-primary">{t.name}</div>
-                  <div className="text-xs text-[#B3A369] font-bold uppercase tracking-wider">{t.role}</div>
-                </div>
-              </div>
+              <div className="font-bold text-xl text-primary mb-1">{diag.id}</div>
+              <div className="text-[10px] font-bold text-[#B3A369] uppercase tracking-widest mb-3">{diag.name}</div>
+              <p className="text-slate-500 text-sm leading-relaxed">{diag.desc}</p>
             </motion.div>
           ))}
         </StaggerContainer>
@@ -539,18 +522,13 @@ export default function LandingPage() {
 
       {/* ── Footer ──────────────────────────────────────────── */}
       <Reveal>
-        <footer className="py-12 px-6 lg:px-20 border-t border-slate-200 bg-white">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#B3A369]">schema</span>
-              <span className="text-xl font-black tracking-tighter uppercase text-primary">UMLogic</span>
-            </div>
+        <footer className="py-8 px-6 lg:px-20 border-t border-slate-200 bg-white">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-slate-500 text-sm font-medium">UMLogic — Built for CS 2340.</p>
             <div className="flex gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
-              <a className="hover:text-[#B3A369] transition-colors" href="#">Privacy</a>
-              <a className="hover:text-[#B3A369] transition-colors" href="#">Terms</a>
-              <a className="hover:text-[#B3A369] transition-colors" href="#">GitHub</a>
+              <a className="hover:text-[#B3A369] transition-colors" href="https://syllabus.gatech.edu/syllabi/2340/a" target="_blank" rel="noopener noreferrer">CS 2340</a>
+              <a className="hover:text-[#B3A369] transition-colors" href="https://github.com/AAsteriskz7/umlogic" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
-            <p className="text-slate-500 text-sm">© 2025 UMLogic. Built for the high-performers.</p>
           </div>
         </footer>
       </Reveal>
