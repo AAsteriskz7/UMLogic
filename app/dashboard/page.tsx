@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
 import {
   Dialog,
@@ -97,6 +98,7 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
 
 // ─── Main Dashboard ───────────────────────────────────────────────
 export default function Dashboard() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
@@ -179,6 +181,39 @@ export default function Dashboard() {
   const handleClearStorage = () => {
     localStorage.clear();
     window.location.reload();
+  };
+
+  // Determine which tab to navigate to based on module completion
+  const handleResumeModule = () => {
+    const moduleId = currentModule.id;
+    const p = progress[moduleId];
+    
+    // If module not started, go to purpose (first tab)
+    if (!p || currentModule.pct === 0) {
+      router.push(`/${moduleId}`);
+      return;
+    }
+    
+    // If purpose incomplete, go to purpose tab
+    if (!p.purpose) {
+      router.push(`/${moduleId}`);
+      return;
+    }
+    
+    // If builder incomplete, go to builder tab (interactive build)
+    if (!p.builder) {
+      router.push(`/${moduleId}?tab=builder`);
+      return;
+    }
+    
+    // If quiz incomplete or not 100%, go to quiz tab
+    if (p.quiz < 100) {
+      router.push(`/${moduleId}?tab=quiz`);
+      return;
+    }
+    
+    // Module complete, go to purpose by default
+    router.push(`/${moduleId}`);
   };
 
   return (
@@ -276,6 +311,7 @@ export default function Dashboard() {
               <div className="flex gap-4">
                 <motion.button
                   suppressHydrationWarning
+                  onClick={handleResumeModule}
                   className="bg-accent text-primary px-7 py-3 rounded-xl font-extrabold text-sm flex items-center gap-2 group/btn"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
