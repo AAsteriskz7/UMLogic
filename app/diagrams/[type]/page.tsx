@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
 import UCDInteractiveBuild from '@/components/ucd-interactive-build';
 import SDInteractiveBuild from '@/components/sd-interactive-build';
@@ -794,6 +794,7 @@ const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
 
 export default function DiagramModule() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const diagramType = typeof params?.type === 'string' ? params.type : 'ucd';
   const diagramTitle = DIAGRAM_TITLES[diagramType] ?? 'Diagram Module';
   const [activeTab, setActiveTab] = useState<'info' | 'build' | 'quiz'>('info');
@@ -807,6 +808,20 @@ export default function DiagramModule() {
 
   const questions = QUIZ_DATA[diagramType] || [];
   const currentQuestion = questions[currentQuestionIdx];
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'info' || tab === 'build' || tab === 'quiz') {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'umlogic_last_location',
+      JSON.stringify({ moduleId: diagramType, tab: activeTab })
+    );
+  }, [diagramType, activeTab]);
 
   // Persist progress to localStorage
   useEffect(() => {
