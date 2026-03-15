@@ -2,42 +2,42 @@
   "scenarios": {
     "1": {
       "title": "Scenario 1: Student browsing clubs",
-      "text": "..."
+      "text": "A student logs into CampusConnect, navigates to the 'Clubs' tab, and browses a list of available organizations. They can filter by category or search by name. If they find a club of interest, they can click to view its details and click 'Join' to become a member."
     },
     "2": {
       "title": "Scenario 2: Daniel creating an event & RSVP Logic",
-      "text": "..."
+      "text": "Daniel, a club president, logs into CampusConnect and navigates to his club's management dashboard. He creates a new event, providing a title, date, time, location, and a description. He then sets an RSVP limit of 50 students. When other students view the event, they can RSVP. The system must verify the event is not full before incrementing the RSVP count."
     },
     "3": {
       "title": "Scenario 3: Priya checking events",
-      "text": "..."
+      "text": "Priya wants to see what's happening on campus this weekend. She opens CampusConnect and navigates to the 'Events' page. The system requests her current location and displays events happening nearby within the next 48 hours. Priya selects an event to view its details and adds it to her personal calendar."
     }
   },
   "diagrams": {
     "ucd": {
       "name": "Use Case Diagram",
-      "purpose": "Show actors and their actions",
-      "blurb": "..."
+      "purpose": "Identify actors and their goals within the system.",
+      "blurb": "The Use Case Diagram (UCD) is the highest-level view of the system. It defines WHO uses the system (Actors) and WHAT they want to accomplish (Use Cases), without worrying about HOW the system does it. In CampusConnect, actors include 'Student' and 'Club President', while use cases include 'Browse Clubs', 'Create Event', and 'RSVP to Event'."
     },
     "dmd": {
       "name": "Domain Model Diagram",
-      "purpose": "Show conceptual classes and relationships",
-      "blurb": "..."
+      "purpose": "Map the real-world concepts and their relationships.",
+      "blurb": "The Domain Model Diagram (DMD) illustrates the conceptual classes in the problem domain. Unlike a class diagram, it does not include methods or precise data types. For CampusConnect, key concepts are 'Student', 'Club', and 'Event'. The DMD shows that a Club 'hosts' an Event, and a Student 'RSVPs' to an Event, establishing the vocabulary for the project."
     },
     "ssd": {
       "name": "System Sequence Diagram",
-      "purpose": "Show external interactions (Scenario 3)",
-      "blurb": "..."
+      "purpose": "Trace the interaction between an actor and the system.",
+      "blurb": "A System Sequence Diagram (SSD) treats the entire system as a single 'black box'. It focuses on the chronological sequence of events (messages) that pass between an external Actor and the System during a specific scenario. For Priya checking events (Scenario 3), she sends a 'getEvents()' message to the system, and the system returns a list of events."
     },
     "sd": {
       "name": "Sequence Diagram",
-      "purpose": "Show internal logic (Scenario 2)",
-      "blurb": "..."
+      "purpose": "Illustrate internal object interactions to fulfill a use case.",
+      "blurb": "While an SSD treats the system as a black box, a Sequence Diagram (SD) breaks it open. It shows exactly which internal objects (like controllers, databases, and UI components) communicate to achieve the goal. For Daniel creating an event, the SD shows the UI sending data to an EventController, which then creates a new Event object and saves it to the Database."
     },
     "dcd": {
-      "name": "Domain Class Diagram",
-      "purpose": "Show attributes and methods",
-      "blurb": "..."
+      "name": "Design Class Diagram",
+      "purpose": "Define the exact software classes, attributes, and methods.",
+      "blurb": "The Design Class Diagram (DCD) is the blueprint for the code. It evolves from the Domain Model by adding specific property types (String, int) and methods (createEvent(), rsvp()). It also shows true software relationships like inheritance and dependency. The methods in the DCD must match the messages being passed in the Sequence Diagram."
     }
   }
 }

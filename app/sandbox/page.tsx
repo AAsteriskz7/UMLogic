@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TEMPLATE_2340 = `sequenceDiagram\n  actor C as Client\n  participant S as Server\n  participant DB as Database\n  C->>S: GET /api/users\n  S->>DB: query users\n  DB-->>S: return data\n  S-->>C: send 200 OK`;
+const TEMPLATE_DEFAULT = `sequenceDiagram\n  actor C as Client\n  participant S as Server\n  participant DB as Database\n  C->>S: GET /api/users\n  S->>DB: query users\n  DB-->>S: return data\n  S-->>C: send 200 OK`;
 
 const INITIAL_CODE = `classDiagram
   class User {
@@ -93,7 +93,7 @@ export default function SandboxPage() {
   };
 
   const loadTemplate = () => {
-    setCode(TEMPLATE_2340);
+    setCode(TEMPLATE_DEFAULT);
   };
 
   const handleZoom = (type: 'in' | 'out' | 'reset') => {
@@ -127,7 +127,7 @@ export default function SandboxPage() {
             </button>
             <button onClick={loadTemplate} className="flex items-center gap-2 px-3 py-1.5 text-white bg-primary rounded-lg text-xs font-semibold hover:opacity-90 transition-colors">
               <span className="material-symbols-outlined text-sm">folder_open</span>
-              Load 2340 Template
+              Load Smart Template
             </button>
             <div className="h-6 w-px bg-primary/10 mx-1"></div>
             <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-lg">
@@ -281,7 +281,7 @@ export default function SandboxPage() {
                     <span className="text-xs font-bold">Pro Tip</span>
                   </div>
                   <p className="text-[11px] leading-relaxed opacity-80">
-                    Use the 2340 Template button to quickly load standard software engineering patterns like Factory, Singleton, or Observer.
+                    Use the Smart Template button to quickly load standard software engineering patterns like Factory, Singleton, or Observer.
                   </p>
                 </div>
               </div>
