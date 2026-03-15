@@ -51,8 +51,8 @@ interface ProgressCardProps {
 }
 
 const statusConfig = {
-  ready:       { badge: 'COMPLETED',   bg: 'bg-emerald-100', text: 'text-emerald-700', stroke: '#10b981', ring: '#10b981' },
-  'in-progress': { badge: 'IN PROGRESS', bg: 'bg-blue-100',   text: 'text-blue-700',   stroke: '#003057', ring: '#003057' },
+  ready: { badge: 'COMPLETED', bg: 'bg-emerald-100', text: 'text-emerald-700', stroke: '#10b981', ring: '#10b981' },
+  'in-progress': { badge: 'IN PROGRESS', bg: 'bg-blue-100', text: 'text-blue-700', stroke: '#003057', ring: '#003057' },
 };
 
 function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps) {
@@ -97,12 +97,14 @@ function ProgressCard({ label, subtitle, pct, status, delay }: ProgressCardProps
 
 // ─── Main Dashboard ───────────────────────────────────────────────
 export default function Dashboard() {
+  const [mounted, setMounted] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [briefOpen, setBriefOpen] = useState(false);
   const [progress, setProgress] = useState<Record<string, any>>({});
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    setMounted(true);
     const loadProgress = () => {
       const saved = localStorage.getItem('umlogic_progress');
       if (saved) {
@@ -112,7 +114,7 @@ export default function Dashboard() {
           ucd: { purpose: false, builder: false, quiz: 0 },
           dmd: { purpose: false, builder: false, quiz: 0 },
           ssd: { purpose: false, builder: false, quiz: 0 },
-          sd:  { purpose: false, builder: false, quiz: 0 },
+          sd: { purpose: false, builder: false, quiz: 0 },
           dcd: { purpose: false, builder: false, quiz: 0 },
         };
         localStorage.setItem('umlogic_progress', JSON.stringify(initial));
@@ -135,6 +137,8 @@ export default function Dashboard() {
     };
   }, []);
 
+  if (!mounted) return null;
+
   const calculatePct = (key: string) => {
     if (key === 'finalExam') return progress.finalExam || 0;
     const p = progress[key];
@@ -150,7 +154,7 @@ export default function Dashboard() {
     { id: 'ucd', label: "UCD", subtitle: "Use Case Diagram" },
     { id: 'dmd', label: "DMD", subtitle: "Domain Model" },
     { id: 'ssd', label: "SSD", subtitle: "System Sequence" },
-    { id: 'sd',  label: "SD",  subtitle: "Sequence Diagram" },
+    { id: 'sd', label: "SD", subtitle: "Sequence Diagram" },
     { id: 'dcd', label: "DCD", subtitle: "Design Class" },
     { id: 'finalExam', label: "Final Exam", subtitle: "Cumulative Quiz" },
   ];
@@ -164,8 +168,8 @@ export default function Dashboard() {
     };
   });
 
-  const filteredModules = allModules.filter(m => 
-    m.label.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredModules = allModules.filter(m =>
+    m.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
     m.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -239,8 +243,8 @@ export default function Dashboard() {
             whileHover={{ x: '100%' }}
             transition={{ duration: 0.8 }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/85 to-transparent z-10" />
-          <div className="h-64 relative flex items-center px-12 z-20">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/60 to-transparent z-10" />
+          <div className="h-64 relative flex items-center px-12 z-20 text-white">
             <div className="max-w-xl">
               <motion.span
                 className="inline-block px-3 py-1 bg-accent/20 text-accent text-xs font-bold rounded-full mb-4 uppercase tracking-widest"
@@ -259,18 +263,19 @@ export default function Dashboard() {
                 Module {moduleIndex}: {currentModule.subtitle}
               </motion.h2>
               <motion.p
-                className="text-white/70 text-base mb-6"
+                className="text-white/80 text-base mb-6 font-medium"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 }}
               >
-                {currentModule.id === 'ucd' ? "Master actors and system boundaries." : 
-                 currentModule.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
-                 currentModule.id === 'finalExam' ? "Test your knowledge across all diagrams in the ultimate quiz." :
-                 "Deep dive into the internal logic and consistency of CampusConnect."}
+                {currentModule.id === 'ucd' ? "Master actors and system boundaries." :
+                  currentModule.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
+                    currentModule.id === 'finalExam' ? "Test your knowledge across all diagrams in the ultimate quiz." :
+                      "Deep dive into the internal logic and consistency of CampusConnect."}
               </motion.p>
               <div className="flex gap-4">
                 <motion.button
+                  suppressHydrationWarning
                   className="bg-accent text-primary px-7 py-3 rounded-xl font-extrabold text-sm flex items-center gap-2 group/btn"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -292,8 +297,12 @@ export default function Dashboard() {
             </div>
           </div>
           <div
-            className="absolute right-0 top-0 h-full w-1/2 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUfVkA1xL0B823-S3yuApdu-RBRqCAASuMqu1giSKeJxGJdTMpLwVnKhr_EFFb9NRibBBTo3z95yJT6qmosBCSMWKqtOiDBJPltGKR5cQ5kF5fEEFxBSgEVc99aO08qRZookwodERsV7XUnTxC89iwUs0V9Hg9CI2-NYBHlzOcehXEWxBN63O1KRy5LEzAEAljwR8J2iSptTh613icNPcWZ0r40xqBnEY13lItzlCNR5HySEGvBHo8kuCq9vd1xJobE9wjruqRD')" }}
+            className="absolute right-0 top-0 h-full w-1/2 bg-cover bg-center opacity-70"
+            style={{
+              backgroundImage: "url('/hero-viz.png')",
+              maskImage: 'linear-gradient(to left, black 50%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to left, black 50%, transparent 100%)'
+            }}
           />
         </motion.section>
 
@@ -318,7 +327,7 @@ export default function Dashboard() {
                   <ProgressCard key={m.id} label={m.label} subtitle={m.subtitle} pct={m.pct} status={m.status} delay={0.1 + (idx * 0.08)} />
                 ))
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -374,6 +383,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex gap-3">
                   <motion.button
+                    suppressHydrationWarning
                     onClick={() => setBriefOpen(true)}
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
@@ -386,6 +396,7 @@ export default function Dashboard() {
             </div>
           </motion.div>
         </motion.section>
+
 
       </main>
 
