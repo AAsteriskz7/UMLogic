@@ -233,6 +233,7 @@ const SDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => vo
           {[
             { term: 'Activation Bar', desc: 'A tall, thin rectangle on a lifeline showing when an object is active.' },
             { term: 'Synchronous Message', desc: 'Procedure call (Solid line, filled arrowhead).' },
+            { term: 'Asynchronous Message', desc: 'Non-blocking call (Solid line, open arrowhead).' },
             { term: 'Return Arrow', desc: 'Control returning to caller (Dashed line, open arrowhead).' },
             { term: 'Self-Message', desc: 'Object calling its own method. Drawn as a loop.' },
             { term: 'Destruction (X)', desc: 'Large X at the end of a lifeline indicating an object is destroyed.' },
@@ -378,11 +379,11 @@ export default function DiagramModule() {
           {/* ===== INFORMATION TAB ===== */}
           {activeTab === 'info' && (
             <>
-              {diagramType === 'ucd' && <UCDInfo setActiveTab={setActiveTab} />}
-              {diagramType === 'dmd' && <DMDInfo setActiveTab={setActiveTab} />}
-              {diagramType === 'ssd' && <SSDInfo setActiveTab={setActiveTab} />}
-              {diagramType === 'sd' && <SDInfo setActiveTab={setActiveTab} />}
-              {diagramType === 'dcd' && <DCDInfo setActiveTab={setActiveTab} />}
+              {diagramType === 'ucd' && <UCDInfo setActiveTab={setActiveTab} diagramTitle={diagramTitle} />}
+              {diagramType === 'dmd' && <DMDInfo setActiveTab={setActiveTab} diagramTitle={diagramTitle} />}
+              {diagramType === 'ssd' && <SSDInfo setActiveTab={setActiveTab} diagramTitle={diagramTitle} />}
+              {diagramType === 'sd' && <SDInfo setActiveTab={setActiveTab} diagramTitle={diagramTitle} />}
+              {diagramType === 'dcd' && <DCDInfo setActiveTab={setActiveTab} diagramTitle={diagramTitle} />}
             </>
           )}
 
@@ -415,7 +416,7 @@ export default function DiagramModule() {
                   </div>
                   <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Quiz Complete!</h2>
                   <p className="text-slate-500 dark:text-slate-400 mb-8 text-center">
-                    You've successfully completed the {diagramTitle} mini quiz.
+                    You&apos;ve successfully completed the {diagramTitle} mini quiz.
                   </p>
                   
                   <div className="grid grid-cols-2 gap-4 w-full mb-8">
@@ -453,7 +454,7 @@ export default function DiagramModule() {
                     <div className="flex items-center gap-2 mb-2">
                        <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
                         {diagramTitle} Mini
-                      </span>
+                       </span>
                       <span className="text-slate-400 text-xs">•</span>
                       <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
                         Question {currentQuestionIdx + 1} of {questions.length}
@@ -468,7 +469,7 @@ export default function DiagramModule() {
                   <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-primary/5 shadow-sm">
                     <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest mb-4">Question</p>
                     <p className="text-xl font-bold text-slate-800 dark:text-slate-100 leading-relaxed italic">
-                      "{currentQuestion.text}"
+                      &ldquo;{currentQuestion.text}&rdquo;
                     </p>
                     {currentQuestion.codeSnippet && (
                        <div className="mt-6 p-4 bg-slate-900 rounded-xl font-mono text-xs text-slate-300 border border-white/5 overflow-x-auto whitespace-pre">
