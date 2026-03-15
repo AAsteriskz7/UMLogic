@@ -253,7 +253,7 @@ export default function LandingPage() {
         </div>
 
         <StaggerContainer className="grid md:grid-cols-3 gap-8">
-          {/* Card: Logic Quiz */}
+          {/* Card: Mini Quiz */}
           <motion.div
             variants={staggerChild}
             className="group bg-white border border-slate-200 rounded-2xl p-8 shadow-sm cursor-default"
@@ -266,7 +266,7 @@ export default function LandingPage() {
             >
               <span className="material-symbols-outlined text-[#B3A369]">quiz</span>
             </motion.div>
-            <h3 className="text-2xl font-bold mb-4 text-primary">Logic Quiz</h3>
+            <h3 className="text-2xl font-bold mb-4 text-primary">Mini Quiz</h3>
             <p className="text-slate-400 mb-6">Interactive challenges based on real-world architecture patterns. Validate your intuition instantly.</p>
             <div className="h-40 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden relative p-4">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
