@@ -8,7 +8,7 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "UMLogic Dashboard",
+  title: "UMLogic | Learn UML Diagramming",
   description: "Mastering UML for CS 2340",
 };
 

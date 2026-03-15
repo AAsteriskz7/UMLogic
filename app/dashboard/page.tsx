@@ -103,24 +103,40 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem('umlogic_progress');
-    if (saved) {
-      setProgress(JSON.parse(saved));
-    } else {
-      // Default initial state (absolute zero)
-      const initial = {
-        ucd: { purpose: false, builder: false, quiz: 0 },
-        dmd: { purpose: false, builder: false, quiz: 0 },
-        ssd: { purpose: false, builder: false, quiz: 0 },
-        sd:  { purpose: false, builder: false, quiz: 0 },
-        dcd: { purpose: false, builder: false, quiz: 0 },
-      };
-      localStorage.setItem('umlogic_progress', JSON.stringify(initial));
-      setProgress(initial);
-    }
+    const loadProgress = () => {
+      const saved = localStorage.getItem('umlogic_progress');
+      if (saved) {
+        setProgress(JSON.parse(saved));
+      } else {
+        const initial = {
+          ucd: { purpose: false, builder: false, quiz: 0 },
+          dmd: { purpose: false, builder: false, quiz: 0 },
+          ssd: { purpose: false, builder: false, quiz: 0 },
+          sd:  { purpose: false, builder: false, quiz: 0 },
+          dcd: { purpose: false, builder: false, quiz: 0 },
+        };
+        localStorage.setItem('umlogic_progress', JSON.stringify(initial));
+        setProgress(initial);
+      }
+    };
+
+    loadProgress();
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'umlogic_progress') loadProgress();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('umlogic_progress_updated', loadProgress);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('umlogic_progress_updated', loadProgress);
+    };
   }, []);
 
   const calculatePct = (key: string) => {
+    if (key === 'finalExam') return progress.finalExam || 0;
     const p = progress[key];
     if (!p) return 0;
     let score = 0;
@@ -136,6 +152,7 @@ export default function Dashboard() {
     { id: 'ssd', label: "SSD", subtitle: "System Sequence" },
     { id: 'sd',  label: "SD",  subtitle: "Sequence Diagram" },
     { id: 'dcd', label: "DCD", subtitle: "Design Class" },
+    { id: 'finalExam', label: "Final Exam", subtitle: "Cumulative Quiz" },
   ];
 
   const allModules = modulesData.map(m => {
@@ -249,6 +266,7 @@ export default function Dashboard() {
               >
                 {currentModule.id === 'ucd' ? "Master actors and system boundaries." : 
                  currentModule.id === 'dmd' ? "Map conceptual classes for Daniel's Robotics Club." :
+                 currentModule.id === 'finalExam' ? "Test your knowledge across all diagrams in the ultimate quiz." :
                  "Deep dive into the internal logic and consistency of CampusConnect."}
               </motion.p>
               <div className="flex gap-4">
@@ -293,7 +311,7 @@ export default function Dashboard() {
           >
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Progress Tracking</h3>
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 min-h-[140px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 min-h-[140px]">
             <AnimatePresence mode='popLayout'>
               {filteredModules.length > 0 ? (
                 filteredModules.map((m, idx) => (

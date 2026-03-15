@@ -1,7 +1,8 @@
 "use client";
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
 import UCDInteractiveBuild from '@/components/ucd-interactive-build';
@@ -176,6 +177,16 @@ const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' |
           ))}
         </div>
 
+        <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-bold text-primary">Interactive Traceability</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">See how the "Browse Clubs" action becomes a System Sequence Diagram.</p>
+          </div>
+          <Link href="/diagrams/ssd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to SSD
+          </Link>
+        </div>
+
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
       </div>
     </div>
@@ -323,6 +334,16 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
               <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
             </div>
           ))}
+        </div>
+        
+        <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-bold text-primary">Interactive Traceability</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">See how the "Student" and "Event" concepts turn into actual code classes.</p>
+          </div>
+          <Link href="/diagrams/dcd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to DCD
+          </Link>
         </div>
         
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
@@ -473,6 +494,16 @@ const SSDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
           ))}
         </div>
 
+        <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-bold text-primary">Interactive Traceability</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">See how "System" is opened up in the Sequence Diagram.</p>
+          </div>
+          <Link href="/diagrams/sd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to SD
+          </Link>
+        </div>
+
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
       </div>
     </div>
@@ -601,6 +632,16 @@ const SDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => vo
               <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-bold text-primary">Interactive Traceability</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Check the Design Class Diagram to see if `createEvent()` and `RSVP()` exist.</p>
+          </div>
+          <Link href="/diagrams/dcd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to DCD
+          </Link>
         </div>
 
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
@@ -733,6 +774,16 @@ const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
           ))}
         </div>
 
+        <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-bold text-primary">Interactive Traceability</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Trace these methods back to the messages in the Sequence Diagram.</p>
+          </div>
+          <Link href="/diagrams/sd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to SD
+          </Link>
+        </div>
+
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
       </div>
     </div>
@@ -756,6 +807,56 @@ export default function DiagramModule() {
 
   const questions = QUIZ_DATA[diagramType] || [];
   const currentQuestion = questions[currentQuestionIdx];
+
+  // Persist progress to localStorage
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const saved = localStorage.getItem('umlogic_progress');
+      let progress = saved ? JSON.parse(saved) : null;
+      if (!progress) {
+        progress = {
+          ucd: { purpose: false, builder: false, quiz: 0 },
+          dmd: { purpose: false, builder: false, quiz: 0 },
+          ssd: { purpose: false, builder: false, quiz: 0 },
+          sd:  { purpose: false, builder: false, quiz: 0 },
+          dcd: { purpose: false, builder: false, quiz: 0 },
+        };
+      }
+
+      let updated = false;
+      if (!progress[diagramType]) {
+        progress[diagramType] = { purpose: false, builder: false, quiz: 0 };
+      }
+
+      if (activeTab === 'info' && !progress[diagramType].purpose) {
+        progress[diagramType].purpose = true;
+        updated = true;
+      }
+      
+      if (activeTab === 'build' && !progress[diagramType].builder) {
+        progress[diagramType].builder = true;
+        updated = true;
+      }
+
+      if (quizComplete) {
+        const scorePercentage = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
+        if ((progress[diagramType].quiz || 0) < scorePercentage) {
+          progress[diagramType].quiz = scorePercentage;
+          updated = true;
+        }
+      }
+
+      if (updated) {
+        localStorage.setItem('umlogic_progress', JSON.stringify(progress));
+        window.dispatchEvent(new Event('umlogic_progress_updated'));
+      }
+    } catch (e) {
+      console.error("Failed to save progress", e);
+    }
+  }, [activeTab, quizComplete, score, diagramType, questions.length]);
+
 
   const handleAnswerSelect = (label: string) => {
     if (isAnswerSubmitted) return;
