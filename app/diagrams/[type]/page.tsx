@@ -193,19 +193,23 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Conceptual Classes & Attributes</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Purpose of a Domain Model Diagram</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          A <span className="font-bold text-primary">Domain Model Diagram (DMD)</span> focuses on real-world concepts (Conceptual Classes) rather than software implementation. It does <span className="font-bold underline">not</span> show methods.
+          A <span className="font-bold text-primary">Domain Model Diagram (DMD)</span> helps students answer a different question than a use case diagram:
+          <span className="font-bold"> what are the important things in the problem domain, and how are they related?</span>
+        </p>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          In CampusConnect, the DMD focuses on conceptual classes like Student, Organization, Event, RSVP, and MembershipRequest. It stays at the real-world level and does <span className="font-bold underline">not</span> include software methods or implementation details.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { term: 'Conceptual Class', desc: 'Real-world thing or concept. Represented by a box with two compartments (Name, Attributes).' },
-            { term: 'Attribute', desc: 'Logical data value of an object (e.g., name, price).' },
-            { term: 'Association', desc: 'Relationship between classes. Often has a name and direction.' },
-            { term: 'Multiplicity', desc: 'Indicates how many instances can be involved (e.g., 1..*, 0..1).' },
+            { term: 'Model the Real World', desc: 'A DMD is for understanding the domain itself, not how you will code it.' },
+            { term: 'Focus on Nouns', desc: 'Students often discover DMD classes by underlining nouns in the requirements and scenarios.' },
+            { term: 'No Methods Yet', desc: 'If you are writing operations like createEvent() or cancelRSVP(), you have probably moved into DCD territory.' },
+            { term: 'Build Shared Understanding', desc: 'A good DMD creates a common picture of the system before the team starts implementation.' },
           ].map((item) => (
             <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
               <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
@@ -219,14 +223,30 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
       <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
         <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
-          <span className="material-symbols-outlined text-accent text-[18px]">format_list_numbered</span>
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Multiplicity Rules</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How to Read the Main Parts</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          A DMD becomes much easier to read once you know its main pieces. These are the building blocks students should look for before trying to make sense of the whole diagram.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Conceptual Class', desc: 'A real-world thing or concept represented by a box, usually with a name and attributes.' },
+            { term: 'Attribute', desc: 'A piece of data that belongs to a conceptual class, such as name, GT ID, or maxCapacity.' },
+            { term: 'Association', desc: 'A relationship between classes that shows how domain concepts are connected.' },
+            { term: 'Association Name / Direction', desc: 'Text and arrow direction can clarify the meaning of a relationship, such as who hosts, submits, or receives.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
         <table className="w-full text-xs text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800">
@@ -241,6 +261,74 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
             <tr><td className="p-3 border-b border-primary/5 font-mono font-bold">0..1</td><td className="p-3 border-b border-primary/5">Zero or one (Optional)</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">construction</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How We Build the CampusConnect DMD</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          The DMD is based on the overall CampusConnect context, not just one scenario. That means we build it by scanning the requirements for the major domain concepts and the relationships that must exist between them.
+        </p>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            { step: 'Step 1', title: 'Underline key nouns', desc: 'Look for core concepts like Student, Organization, Event, RSVP, and MembershipRequest in the requirements text.' },
+            { step: 'Step 2', title: 'Add useful attributes', desc: 'Give each conceptual class the data values the context says it has, such as GT ID, email, title, date, location, or status.' },
+            { step: 'Step 3', title: 'Draw associations', desc: 'Connect classes that interact in the domain, such as organizations hosting events or students making RSVPs.' },
+            { step: 'Step 4', title: 'Label multiplicity and direction', desc: 'Use multiplicity to show how many instances can be related and add direction/name if it makes the relationship clearer.' },
+            { step: 'Step 5', title: 'Stay conceptual', desc: 'Do not add methods or implementation details yet. The goal is to capture the problem space correctly.' },
+          ].map((item) => (
+            <div key={item.step} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-wider">{item.step}</span>
+                <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
+          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
+          <p className="text-xs font-bold text-slate-400">DMD_CampusConnect_Placeholder.png</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How the DMD Connects to the Other Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          The DMD gives structure to the rest of the project. It identifies the major domain concepts that later diagrams either interact with or implement in code.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'DMD -> UCD', desc: 'Use cases tell us what the system must do, and the DMD helps show what domain concepts those behaviors act on.' },
+            { term: 'DMD -> SSD / SD', desc: 'Sequence-based diagrams often pass messages about domain concepts like events, requests, rosters, and RSVPs.' },
+            { term: 'DMD -> DCD', desc: 'The DCD often begins by translating conceptual classes in the DMD into software classes with attributes and methods.' },
+            { term: 'Consistency Check', desc: 'If a major concept appears in one diagram but is missing from the DMD, that is often a sign the model is incomplete.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
         
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
       </div>
@@ -257,19 +345,120 @@ const SSDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">The Black Box View</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Purpose of a System Sequence Diagram</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          A <span className="font-bold text-primary">System Sequence Diagram (SSD)</span> treats the system as a &ldquo;Black Box&rdquo;. It shows events that cross the system boundary but <span className="font-bold underline">not</span> internal logic.
+          A <span className="font-bold text-primary">System Sequence Diagram (SSD)</span> shows how an external actor interacts with the system as a <span className="font-bold">black box</span>. It focuses on events that cross the system boundary, not on internal classes or method calls.
+        </p>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          In this project, the SSD is tied to <span className="font-bold text-primary">Scenario 3</span>, where Priya logs in, views her profile page, checks upcoming events, and selects an event to see more details.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { term: 'System Lifeline', desc: 'Represents the entire application as a single unit.' },
-            { term: 'System Operations', desc: 'High-level events initiated by actors (e.g., joinOrganization()).' },
-            { term: 'Return Message', desc: 'Dashed line with an open arrowhead returning info to the actor.' },
-            { term: 'Actor Lifeline', desc: 'The external entity interacting with the system.' },
+            { term: 'One Scenario, One Flow', desc: 'An SSD usually captures one scenario of one use case rather than the whole system at once.' },
+            { term: 'Black Box Thinking', desc: 'The system is shown as one lifeline because we care about what it does externally, not how it does it internally.' },
+            { term: 'Intent-Based Messages', desc: 'Message names should describe intentions like logIn() or viewProfilePage(), not UI clicks or implementation details.' },
+            { term: 'Great Bridge Diagram', desc: 'An SSD connects high-level use cases to more detailed sequence and class design.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How to Read the Main Parts</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Actor Lifeline', desc: 'The external person or system interacting with CampusConnect, such as Priya.' },
+            { term: 'System Lifeline', desc: 'A single lifeline representing the entire CampusConnect system.' },
+            { term: 'System Operations', desc: 'Messages sent from the actor to the system that describe meaningful user intentions.' },
+            { term: 'Return Message', desc: 'A dashed arrow from the system back to the actor showing returned information or confirmation.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="p-5 rounded-xl border-2 border-primary/10 bg-primary/5">
+          <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">Fragments Matter Too</p>
+          <p className="text-xs text-slate-600">
+            SSDs can also use fragments like <span className="font-bold">loop</span>, <span className="font-bold">alt</span>, <span className="font-bold">opt</span>, and <span className="font-bold">ref</span> when the interaction becomes more complex.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">construction</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How We Build the CampusConnect SSD</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Our SSD is built from Scenario 3, so the focus is Priya interacting with CampusConnect to check organizations and events. The goal is to show the external behavior of the system in time order.
+        </p>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            { step: 'Step 1', title: 'Choose one scenario', desc: 'We use Priya’s profile and event-viewing flow instead of trying to mix in every scenario.' },
+            { step: 'Step 2', title: 'Add the actor and system', desc: 'Priya is the actor, and CampusConnect appears as one system lifeline.' },
+            { step: 'Step 3', title: 'List events in order', desc: 'Messages such as logIn(), viewProfilePage(), and selectEvent(eventId) are placed from top to bottom in time order.' },
+            { step: 'Step 4', title: 'Add return messages', desc: 'The system responds with confirmations and data such as profile details or event details.' },
+            { step: 'Step 5', title: 'Avoid internal detail', desc: 'We do not show controllers, services, or databases here. Those belong in the Sequence Diagram.' },
+          ].map((item) => (
+            <div key={item.step} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-wider">{item.step}</span>
+                <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
+          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
+          <p className="text-xs font-bold text-slate-400">SSD_CampusConnect_Placeholder.png</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How the SSD Connects to the Other Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'SSD -> UCD', desc: 'The SSD takes a use case from the UCD and shows one concrete scenario of that behavior in time order.' },
+            { term: 'SSD -> SD', desc: 'The SSD can be expanded into an SD by opening the black box and showing the internal objects that handle each event.' },
+            { term: 'SSD -> DCD', desc: 'System operations in the SSD often suggest methods that must exist in the Design Class Diagram.' },
+            { term: 'Consistency Check', desc: 'If the SSD shows an operation that cannot be supported by the SD or DCD, the project is probably not internally consistent.' },
           ].map((item) => (
             <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
               <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
@@ -293,21 +482,116 @@ const SDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => vo
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Interaction Logic</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Purpose of a Sequence Diagram</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          <span className="font-bold text-primary">Sequence Diagrams (SD)</span> show how objects interact via messages over time. They reveal the internal flow of a use case.
+          A <span className="font-bold text-primary">Sequence Diagram (SD)</span> shows how internal objects interact through messages over time. Unlike an SSD, the system is no longer a black box.
+        </p>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          In this project, the SD is tied to <span className="font-bold text-primary">Scenario 2</span>, where Daniel creates an event and students RSVP until the workshop reaches capacity.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { term: 'Activation Bar', desc: 'A tall, thin rectangle on a lifeline showing when an object is active.' },
-            { term: 'Synchronous Message', desc: 'Procedure call (Solid line, filled arrowhead).' },
-            { term: 'Asynchronous Message', desc: 'Non-blocking call (Solid line, open arrowhead).' },
-            { term: 'Return Arrow', desc: 'Control returning to caller (Dashed line, open arrowhead).' },
-            { term: 'Self-Message', desc: 'Object calling its own method. Drawn as a loop.' },
-            { term: 'Destruction (X)', desc: 'Large X at the end of a lifeline indicating an object is destroyed.' },
+            { term: 'Open the Black Box', desc: 'Use an SD when you need to show which internal objects or classes are responsible for making a scenario work.' },
+            { term: 'Follow the Flow of Control', desc: 'Messages are ordered from top to bottom, so the SD helps students reason through the execution path.' },
+            { term: 'Great for Logic Checks', desc: 'Alternative paths like event full vs. event available are easier to explain in an SD than in a UCD or DMD.' },
+            { term: 'Closer to Implementation', desc: 'An SD is more implementation-facing than an SSD because it shows internal participants.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How to Read the Main Parts</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Lifeline', desc: 'The dashed vertical line for an object or participant, showing that it exists over time.' },
+            { term: 'Activation Bar', desc: 'A narrow rectangle on the lifeline that shows when an object is active during an interaction.' },
+            { term: 'Synchronous Message', desc: 'A solid line with a filled arrowhead, used when the sender waits for a result.' },
+            { term: 'Asynchronous Message', desc: 'A solid line with an open arrowhead, used when the sender does not wait in the same way.' },
+            { term: 'Return Message', desc: 'A dashed arrow that shows control or data returning to the caller.' },
+            { term: 'Fragment', desc: 'Boxes such as alt, loop, opt, or ref that help model conditional or repeated logic.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">construction</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How We Build the CampusConnect SD</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          The SD in this project follows Scenario 2 and opens the system up so we can see how UI, services, and persistence objects work together during event creation and RSVP handling.
+        </p>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            { step: 'Step 1', title: 'Choose internal participants', desc: 'We identify the actor and the important internal objects involved in the scenario, such as UI, service logic, and the database.' },
+            { step: 'Step 2', title: 'Place messages in time order', desc: 'We show createEvent, RSVP, capacity checks, and cancellation behavior from top to bottom.' },
+            { step: 'Step 3', title: 'Add return paths', desc: 'The SD should show not just requests, but the responses that flow back after work is completed.' },
+            { step: 'Step 4', title: 'Model conditional behavior', desc: 'Fragments like alt help us capture branches such as spot available versus event full.' },
+            { step: 'Step 5', title: 'Check internal consistency', desc: 'Every major interaction should make sense with the SSD, DCD methods, and CampusConnect rules around event capacity.' },
+          ].map((item) => (
+            <div key={item.step} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-wider">{item.step}</span>
+                <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
+          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
+          <p className="text-xs font-bold text-slate-400">SD_CampusConnect_Placeholder.png</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How the SD Connects to the Other Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'SD -> SSD', desc: 'The SD expands the SSD by revealing the internal objects hidden inside the black-box system.' },
+            { term: 'SD -> UCD', desc: 'The SD gives implementation-facing detail to a use case that first appeared at a higher level in the UCD.' },
+            { term: 'SD -> DCD', desc: 'Messages in the SD often correspond to methods that should exist on classes in the Design Class Diagram.' },
+            { term: 'Consistency Check', desc: 'If the SD uses objects or messages that the DCD cannot support, something in the design needs to be fixed.' },
           ].map((item) => (
             <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
               <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
@@ -331,21 +615,116 @@ const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
         </div>
         <div>
           <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-          <h2 className="text-base font-bold text-primary dark:text-slate-100">Design Class Diagrams</h2>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Purpose of a Design Class Diagram</h2>
         </div>
       </div>
       <div className="p-8 flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          A <span className="font-bold text-primary">Design Class Diagram (DCD)</span> models software implementation details, including visibility, types, and inheritance.
+          A <span className="font-bold text-primary">Design Class Diagram (DCD)</span> shows the software-side structure of the system. It models classes, attributes, methods, visibility, and relationships that help developers implement the design.
+        </p>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          In this project, the DCD is based on the CampusConnect context with special attention to <span className="font-bold text-primary">Scenario 2</span>, where event creation and RSVP logic need to be supported by actual software classes.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { term: 'Visibility: (+)', desc: 'Public (accessible anywhere).' },
-            { term: 'Visibility: (-)', desc: 'Private (accessible only within the class).' },
-            { term: 'Visibility: (#)', desc: 'Protected (accessible by subclasses).' },
-            { term: 'Generalization', desc: 'Inheritance relationship (Solid line, hollow triangle).' },
-            { term: 'Composition', desc: 'Strong ownership (Solid line, filled diamond).' },
-            { term: 'Aggregation', desc: 'Weak ownership (Solid line, hollow diamond).' },
+            { term: 'From Conceptual to Software', desc: 'A DCD usually comes after the DMD because it turns domain concepts into actual software classes.' },
+            { term: 'Show Responsibilities', desc: 'Methods help explain what each class is responsible for doing in the system.' },
+            { term: 'Implementation-Oriented', desc: 'Unlike a DMD, the DCD includes types, visibility, and other coding-facing detail.' },
+            { term: 'Useful for Coding', desc: 'A strong DCD becomes a blueprint that makes implementation much more straightforward.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How to Read the Main Parts</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Attributes', desc: 'Fields stored by the class, often written with visibility and type information.' },
+            { term: 'Operations / Methods', desc: 'Behaviors the class supports, often shown with parameters and return types.' },
+            { term: 'Visibility', desc: 'Use + for public, - for private, and # for protected.' },
+            { term: 'Generalization', desc: 'Inheritance relationship, shown with a solid line and hollow triangle arrow.' },
+            { term: 'Composition / Aggregation', desc: 'Strong vs. weak ownership relationships between classes.' },
+            { term: 'Dependency', desc: 'A weaker uses relationship, often shown as a dashed line.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">construction</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How We Build the CampusConnect DCD</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          We build the DCD by translating the important conceptual classes and behaviors of CampusConnect into software classes that could realistically be implemented.
+        </p>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            { step: 'Step 1', title: 'Start from domain concepts', desc: 'Take important conceptual classes like Student, Organization, Event, and RSVP from the DMD.' },
+            { step: 'Step 2', title: 'Add software detail', desc: 'Attributes gain visibility and types, and classes receive methods that support system behavior.' },
+            { step: 'Step 3', title: 'Assign responsibilities', desc: 'Methods like createEvent(), addRSVP(), or cancelRSVP() should live on classes that logically own those behaviors.' },
+            { step: 'Step 4', title: 'Add relationships', desc: 'Use multiplicity and relationship types to show how classes depend on, own, or inherit from one another.' },
+            { step: 'Step 5', title: 'Check scenario support', desc: 'Make sure Scenario 2’s event creation and RSVP flow can actually be supported by the classes and methods you modeled.' },
+          ].map((item) => (
+            <div key={item.step} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-wider">{item.step}</span>
+                <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
+          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
+          <p className="text-xs font-bold text-slate-400">DCD_CampusConnect_Placeholder.png</p>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">How the DCD Connects to the Other Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'DCD -> DMD', desc: 'The DCD often grows out of the conceptual classes first identified in the Domain Model Diagram.' },
+            { term: 'DCD -> SD', desc: 'Methods in the DCD should support the messages and responsibilities shown in the Sequence Diagram.' },
+            { term: 'DCD -> SSD', desc: 'System operations shown in the SSD should be realizable through classes and methods in the DCD.' },
+            { term: 'Consistency Check', desc: 'If the DCD cannot support the required scenarios, then the design is not ready for implementation.' },
           ].map((item) => (
             <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
               <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
