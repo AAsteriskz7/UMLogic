@@ -14,7 +14,237 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const TEMPLATE_DEFAULT = `sequenceDiagram\n  actor C as Client\n  participant S as Server\n  participant DB as Database\n  C->>S: GET /api/users\n  S->>DB: query users\n  DB-->>S: return data\n  S-->>C: send 200 OK`;
+const UCD_ACTOR_ICON = `<img src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 80%22><circle cx=%2232%22 cy=%2212%22 r=%2210%22 stroke=%22black%22 stroke-width=%223%22 fill=%22none%22/><line x1=%2232%22 y1=%2222%22 x2=%2232%22 y2=%2252%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2216%22 y1=%2232%22 x2=%2248%22 y2=%2232%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2232%22 y1=%2252%22 x2=%2218%22 y2=%2276%22 stroke=%22black%22 stroke-width=%223%22/><line x1=%2232%22 y1=%2252%22 x2=%2246%22 y2=%2276%22 stroke=%22black%22 stroke-width=%223%22/></svg>' width='30'>`;
+
+const TEMPLATE_OPTIONS = {
+  ucd: {
+    label: 'Use Case Diagram',
+    fileName: 'UseCaseDiagram.mmd',
+    code: `---
+config:
+  layout: dagre
+  securityLevel: loose
+---
+flowchart LR
+
+    subgraph Actors_Left[" "]
+        direction TB
+        Student@{ label: "${UCD_ACTOR_ICON}<br>Student" }
+        President@{ label: "${UCD_ACTOR_ICON}<br>President" }
+        Officer@{ label: "${UCD_ACTOR_ICON}<br>Officer" }
+    end
+
+    subgraph CampusConnect_System["<b style='font-size: 1.25em;'>System</b>"]
+        direction TB
+        UC2(["Search for Organization"])
+        UC3(["Submit Membership Request"])
+        UC7(["View Profile / Upcoming Events"])
+        UC6(["RSVP to Event"])
+        UC4(["Review Membership Request"])
+        UC5(["Create Event"])
+        UC1(["Login to System"])
+    end
+
+    subgraph Actors_Right[" "]
+        direction TB
+        Auth@{ label: "${UCD_ACTOR_ICON}<br>External Auth<br>System" }
+    end
+
+    Student --- UC1
+    President --- UC1
+    Officer --- UC1
+    UC1 --- Auth
+    Student --- UC2
+    Student --- UC3
+    UC3 -. "<<include>>" .-> UC2
+    President --- UC4
+    Officer --- UC5
+    Student --- UC7
+    UC7 -. "<<include>>" .-> UC1
+    Student --- UC6
+    UC6 -. "<<extend>>" .-> UC7
+
+    Student@{ shape: rect}
+    President@{ shape: rect}
+    Officer@{ shape: rect}
+    Auth@{ shape: rect}
+    style Student fill:none,stroke:none
+    style President fill:none,stroke:none
+    style Officer fill:none,stroke:none
+    style Auth fill:none,stroke:none
+    style Actors_Left fill:none,stroke:none
+    style Actors_Right fill:none,stroke:none
+    style UC1 fill:#fff,stroke:#333,stroke-width:2px
+    style UC2 fill:#fff,stroke:#333,stroke-width:2px
+    style UC3 fill:#fff,stroke:#333,stroke-width:2px
+    style UC4 fill:#fff,stroke:#333,stroke-width:2px
+    style UC5 fill:#fff,stroke:#333,stroke-width:2px
+    style UC6 fill:#fff,stroke:#333,stroke-width:2px
+    style UC7 fill:#fff,stroke:#333,stroke-width:2px
+    style CampusConnect_System fill:#BBDEFB`,
+  },
+  dmd: {
+    label: 'Domain Model Diagram',
+    fileName: 'DomainModelDiagram.mmd',
+    code: `classDiagram
+direction LR
+    class Student {
+        name
+        gtId
+        email
+        major
+    }
+
+    class Organization {
+        organizationId
+        name
+        description
+    }
+
+    class Event {
+        title
+        description
+        date
+        location
+        maxCapacity
+    }
+
+    class MembershipRequest {
+        status
+        submittedAt
+    }
+
+    class RSVP {
+        status
+        timestamp
+    }
+
+    note for Organization "Each organization has exactly 1 president, \nmay have multiple officers, \nand a student may be president of \nat most 1 organization at a time."
+    note for MembershipRequest "Each membership request is associated with 1 student and 1 organization. \nIf approved, the student becomes a member. If rejected, the request is archived but still recorded."
+
+    Student "1" -- "0..*" Organization : membership
+    Student "1" -- "0..*" MembershipRequest : submits
+    Organization "1" -- "0..*" MembershipRequest : receives
+    Organization "1" -- "0..*" Event : hosts
+    Student "1" -- "0..*" RSVP : makes
+    Event "1" -- "0..*" RSVP : has`,
+  },
+  ssd: {
+    label: 'System Sequence Diagram',
+    fileName: 'SystemSequenceDiagram.mmd',
+    code: `sequenceDiagram
+    actor Priya
+    participant System as CampusConnect System
+
+    Priya->>System: logIn(credentials)
+    System-->>Priya: showLoginConfirmation()
+
+    Priya->>System: viewProfilePage()
+    System-->>Priya: showProfile(organizations, upcomingEvents)
+
+    Priya->>System: selectEvent(eventId)
+    System-->>Priya: showEventDetails(title, description, date, location, registeredCount)
+
+    Priya->>System: logOut()
+    System-->>Priya: confirmLogout()`,
+  },
+  sd: {
+    label: 'Sequence Diagram',
+    fileName: 'SequenceDiagram.mmd',
+    code: `sequenceDiagram
+    participant Officer as Daniel (Officer)
+    participant Student as Student
+    participant UI as CampusConnect UI : UI
+    participant System as Event Service : EventHandler
+    participant DB as Database : Database
+
+    Officer->>UI: createEvent(title, description, date, location, maxCapacity)
+    UI->>System: Submit event
+    System->>DB: Save event
+    DB-->>System: Event created
+    System-->>UI: Success
+    UI-->>Officer: Event creation confirmed
+
+    Student->>UI: reserveSpot(eventId)
+    UI->>System: Submit RSVP
+    System->>DB: Check capacity
+
+    alt Spot available
+        DB-->>System: Available
+        System->>DB: Save RSVP
+        DB-->>System: RSVP saved
+        System-->>UI: Confirm RSVP
+        UI-->>Student: Reservation confirmed
+    else Event full
+        DB-->>System: Full
+        System-->>UI: Deny RSVP
+        UI-->>Student: Event full
+    end
+
+    Student->>UI: cancelReservation(eventId)
+    UI->>System: Submit cancellation
+    System->>DB: Remove RSVP
+    DB-->>System: RSVP removed
+    System-->>UI: Confirm cancellation
+    UI-->>Student: Reservation cancelled
+
+    Note over Student,DB: Capacity increases, allowing another RSVP`,
+  },
+  dcd: {
+    label: 'Design Class Diagram',
+    fileName: 'DesignClassDiagram.mmd',
+    code: `classDiagram
+    class Student {
+        - gtId: String
+        - name: String
+        - email: String
+        - major: String
+        + Student(pGtId: String, pName: String, pEmail: String, pMajor: String)
+        + rsvpToEvent(pEvent: Event) RSVP
+        + cancelRSVP(pRSVP: RSVP) void
+    }
+
+    class Organization {
+        - organizationId: String
+        - name: String
+        - description: String
+        + Organization(pOrganizationId: String, pName: String, pDescription: String)
+        + createEvent(pTitle: String, pDescription: String, pDate: DateTime, pLocation: String, pMaxCapacity: int) Event
+        + getAttendanceList(pEvent: Event) List~Student~
+    }
+
+    class Event {
+        - eventId: String
+        - title: String
+        - description: String
+        - date: DateTime
+        - location: String
+        - maxCapacity: int
+        - isFull: boolean
+        + Event(pEventId: String, pTitle: String, pDescription: String, pDate: DateTime, pLocation: String, pMaxCapacity: int)
+        + addRSVP(pStudent: Student) RSVP
+        + removeRSVP(pStudent: Student) void
+        + hasAvailableCapacity() boolean
+        + getRemainingCapacity() int
+        + markFull() void
+    }
+
+    class RSVP {
+        - rsvpId: String
+        - status: String
+        - timestamp: DateTime
+        + RSVP(pRsvpId: String, pStatus: String, pTimestamp: DateTime)
+        + confirm() void
+        + cancel() void
+    }
+
+    Student "1" --> "0..*" RSVP : makes
+    Event "1" --> "0..*" RSVP : contains
+    Organization "1" --> "0..*" Event : hosts
+    Organization "1" --> "1" Student : president
+    Organization "1" --> "0..*" Student : officers`,
+  },
+} as const;
 
 const INITIAL_CODE = `classDiagram
   class User {
@@ -36,6 +266,7 @@ export default function SandboxPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [activeView, setActiveView] = useState<'editor' | 'preview' | 'split'>('split');
   const [code, setCode] = useState(INITIAL_CODE);
+  const [selectedTemplate, setSelectedTemplate] = useState<keyof typeof TEMPLATE_OPTIONS | ''>('');
   const [cursorPos, setCursorPos] = useState({ line: 1, column: 1 });
   const [showCheatSheet, setShowCheatSheet] = useState(true);
   const [zoom, setZoom] = useState(1);
@@ -92,8 +323,11 @@ export default function SandboxPage() {
     }
   };
 
-  const loadTemplate = () => {
-    setCode(TEMPLATE_DEFAULT);
+  const loadTemplate = (templateKey: keyof typeof TEMPLATE_OPTIONS) => {
+    const template = TEMPLATE_OPTIONS[templateKey];
+    setCode(template.code);
+    setDiagramName(template.label);
+    setSelectedTemplate(templateKey);
   };
 
   const handleZoom = (type: 'in' | 'out' | 'reset') => {
@@ -125,10 +359,24 @@ export default function SandboxPage() {
               <span className="material-symbols-outlined text-sm">download</span>
               Download PNG
             </button>
-            <button onClick={loadTemplate} className="flex items-center gap-2 px-3 py-1.5 text-white bg-primary rounded-lg text-xs font-semibold hover:opacity-90 transition-colors">
+            <div className="flex items-center gap-2 px-3 py-1.5 text-white bg-primary rounded-lg text-xs font-semibold transition-colors">
               <span className="material-symbols-outlined text-sm">folder_open</span>
-              Load Smart Template
-            </button>
+              <select
+                value={selectedTemplate}
+                onChange={(e) => {
+                  const templateKey = e.target.value as keyof typeof TEMPLATE_OPTIONS;
+                  if (templateKey) loadTemplate(templateKey);
+                }}
+                className="bg-transparent border-none outline-none text-xs font-semibold text-white"
+              >
+                <option value="" className="text-slate-900">Load Diagram Template</option>
+                {Object.entries(TEMPLATE_OPTIONS).map(([key, template]) => (
+                  <option key={key} value={key} className="text-slate-900">
+                    {template.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="h-6 w-px bg-primary/10 mx-1"></div>
             <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-lg">
               <span className="material-symbols-outlined text-sm text-primary/40">edit</span>
@@ -169,7 +417,9 @@ export default function SandboxPage() {
           {(activeView === 'editor' || activeView === 'split') && (
             <div className={`flex flex-col bg-slate-800 border-r border-slate-700/50 ${activeView === 'split' ? 'w-1/2' : 'flex-1'}`}>
               <div className="flex items-center px-4 py-2 bg-slate-800/80 border-b border-slate-700/50 justify-between shrink-0">
-                <span className="text-slate-400 text-xs font-mono">ClassDiagram.mmd</span>
+                <span className="text-slate-400 text-xs font-mono">
+                  {selectedTemplate ? TEMPLATE_OPTIONS[selectedTemplate].fileName : 'SandboxDiagram.mmd'}
+                </span>
                 <span className="text-slate-500 text-[10px] uppercase tracking-widest font-bold">Mermaid Syntax</span>
               </div>
               <div className="flex-1 overflow-hidden">
@@ -281,7 +531,7 @@ export default function SandboxPage() {
                     <span className="text-xs font-bold">Pro Tip</span>
                   </div>
                   <p className="text-[11px] leading-relaxed opacity-80">
-                    Use the Smart Template button to quickly load standard software engineering patterns like Factory, Singleton, or Observer.
+                    Use the template dropdown to load one of the five UML diagram types covered in UMLogic.
                   </p>
                 </div>
               </div>
