@@ -9,7 +9,6 @@ import { SSDInteractiveBuild } from '@/components/ssd-interactive-build';
 import { DMDInteractiveBuild } from '@/components/dmd-interactive-build';
 import { DCDInteractiveBuild } from '@/components/dcd-interactive-build';
 import { QUIZ_DATA, Question } from '@/lib/quiz-data';
-import { useEffect } from 'react';
 
 const DIAGRAM_TITLES: Record<string, string> = {
   ucd: 'Use Case Diagram',
@@ -18,6 +17,278 @@ const DIAGRAM_TITLES: Record<string, string> = {
   sd:  'Sequence Diagram',
   dcd: 'Design Class Diagram',
 };
+
+// --- Information Component Sub-sections ---
+
+const InfoFooter = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build') => void, diagramTitle: string }) => (
+  <div className="flex justify-end pt-2">
+    <button
+      onClick={() => setActiveTab('build')}
+      className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+    >
+      Step-by-Step Build
+      <span className="material-symbols-outlined text-sm">construction</span>
+    </button>
+  </div>
+);
+
+const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' | 'info' | 'quiz') => void, diagramTitle: string }) => (
+  <div className="flex flex-col gap-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">menu_book</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Fundamentals</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <span className="font-bold text-primary dark:text-slate-200">Use Cases</span> are text stories used to discover and record functional requirements. They describe interactions between users and a subject (the System under Development (SuD)).
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Primary Actor', desc: 'Has user goals fulfilled through using services of the SuD. Typically drawn on the left.' },
+            { term: 'Supporting Actor', desc: 'Provides a service (like a database or admin approval) to the SuD. Typically drawn on the right.' },
+            { term: 'Offstage Actor', desc: 'A stakeholder with an interest in the behavior but no direct interaction. Drawn at the bottom.' },
+            { term: 'Scenario', desc: 'A specific sequence of interactions between actors and the system.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">swap_horiz</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Relationships</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="p-5 rounded-xl border-2 border-primary/10 bg-primary/5">
+            <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-bold rounded uppercase font-mono">&lt;&lt;include&gt;&gt;</span>
+            <p className="text-xs text-slate-600 mt-3">Mandatory behavior used by several use cases. Arrow points <span className="font-bold">TO</span> the child use case.</p>
+          </div>
+          <div className="p-5 rounded-xl border-2 border-accent/10 bg-accent/5">
+            <span className="px-2 py-0.5 bg-accent text-white text-[10px] font-bold rounded uppercase font-mono">&lt;&lt;extend&gt;&gt;</span>
+            <p className="text-xs text-slate-600 mt-3">Optional/conditional behavior or exceptions. Arrow points <span className="font-bold">TO</span> the base use case.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">CampusConnect - Join Organization</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-4">
+        <p className="text-sm text-slate-600 italic leading-relaxed">
+          &ldquo;A student joins an organization. The system validates their status. If approval is needed, an administrator is notified.&rdquo;
+        </p>
+        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
+           <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
+           <p className="text-xs font-bold text-slate-400">UCD_CampusConnect_JoinOrg.png</p>
+        </div>
+
+        <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
+      </div>
+    </div>
+  </div>
+);
+
+const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => void, diagramTitle: string }) => (
+  <div className="flex flex-col gap-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">category</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Conceptual Classes & Attributes</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          A <span className="font-bold text-primary">Domain Model Diagram (DMD)</span> focuses on real-world concepts (Conceptual Classes) rather than software implementation. It does <span className="font-bold underline">not</span> show methods.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Conceptual Class', desc: 'Real-world thing or concept. Represented by a box with two compartments (Name, Attributes).' },
+            { term: 'Attribute', desc: 'Logical data value of an object (e.g., name, price).' },
+            { term: 'Association', desc: 'Relationship between classes. Often has a name and direction.' },
+            { term: 'Multiplicity', desc: 'Indicates how many instances can be involved (e.g., 1..*, 0..1).' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-accent text-[18px]">format_list_numbered</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Multiplicity Rules</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <table className="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr className="bg-slate-50 dark:bg-slate-800">
+              <th className="p-3 border-b border-primary/5 font-bold uppercase">Notation</th>
+              <th className="p-3 border-b border-primary/5 font-bold uppercase">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td className="p-3 border-b border-primary/5 font-mono font-bold">1</td><td className="p-3 border-b border-primary/5">Exactly one</td></tr>
+            <tr><td className="p-3 border-b border-primary/5 font-mono font-bold">*</td><td className="p-3 border-b border-primary/5">Zero or more (Many)</td></tr>
+            <tr><td className="p-3 border-b border-primary/5 font-mono font-bold">1..*</td><td className="p-3 border-b border-primary/5">One or more (At least one)</td></tr>
+            <tr><td className="p-3 border-b border-primary/5 font-mono font-bold">0..1</td><td className="p-3 border-b border-primary/5">Zero or one (Optional)</td></tr>
+          </tbody>
+        </table>
+        
+        <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
+      </div>
+    </div>
+  </div>
+);
+
+const SSDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => void, diagramTitle: string }) => (
+  <div className="flex flex-col gap-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">visibility_off</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">The Black Box View</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          A <span className="font-bold text-primary">System Sequence Diagram (SSD)</span> treats the system as a &ldquo;Black Box&rdquo;. It shows events that cross the system boundary but <span className="font-bold underline">not</span> internal logic.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'System Lifeline', desc: 'Represents the entire application as a single unit.' },
+            { term: 'System Operations', desc: 'High-level events initiated by actors (e.g., joinOrganization()).' },
+            { term: 'Return Message', desc: 'Dashed line with an open arrowhead returning info to the actor.' },
+            { term: 'Actor Lifeline', desc: 'The external entity interacting with the system.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
+      </div>
+    </div>
+  </div>
+);
+
+const SDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => void, diagramTitle: string }) => (
+  <div className="flex flex-col gap-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">schema</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Interaction Logic</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <span className="font-bold text-primary">Sequence Diagrams (SD)</span> show how objects interact via messages over time. They reveal the internal flow of a use case.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Activation Bar', desc: 'A tall, thin rectangle on a lifeline showing when an object is active.' },
+            { term: 'Synchronous Message', desc: 'Procedure call (Solid line, filled arrowhead).' },
+            { term: 'Return Arrow', desc: 'Control returning to caller (Dashed line, open arrowhead).' },
+            { term: 'Self-Message', desc: 'Object calling its own method. Drawn as a loop.' },
+            { term: 'Destruction (X)', desc: 'Large X at the end of a lifeline indicating an object is destroyed.' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
+      </div>
+    </div>
+  </div>
+);
+
+const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => void, diagramTitle: string }) => (
+  <div className="flex flex-col gap-8 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+      <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary text-[18px]">settings_suggest</span>
+        </div>
+        <div>
+          <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
+          <h2 className="text-base font-bold text-primary dark:text-slate-100">Design Class Diagrams</h2>
+        </div>
+      </div>
+      <div className="p-8 flex flex-col gap-6">
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          A <span className="font-bold text-primary">Design Class Diagram (DCD)</span> models software implementation details, including visibility, types, and inheritance.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { term: 'Visibility: (+)', desc: 'Public (accessible anywhere).' },
+            { term: 'Visibility: (-)', desc: 'Private (accessible only within the class).' },
+            { term: 'Visibility: (#)', desc: 'Protected (accessible by subclasses).' },
+            { term: 'Generalization', desc: 'Inheritance relationship (Solid line, hollow triangle).' },
+            { term: 'Composition', desc: 'Strong ownership (Solid line, filled diamond).' },
+            { term: 'Aggregation', desc: 'Weak ownership (Solid line, hollow diamond).' },
+          ].map((item) => (
+            <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
+              <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
+      </div>
+    </div>
+  </div>
+);
+
+// --- Main Module Component ---
 
 export default function DiagramModule() {
   const params = useParams();
@@ -106,245 +377,13 @@ export default function DiagramModule() {
 
           {/* ===== INFORMATION TAB ===== */}
           {activeTab === 'info' && (
-            <div className="flex flex-col gap-8 max-w-4xl">
- 
-              {/* Section 1: Use Case Fundamentals */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
-                <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary text-[18px]">menu_book</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 01</p>
-                    <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Fundamentals</h2>
-                  </div>
-                </div>
- 
-                <div className="p-8 flex flex-col gap-6">
-                  <div className="flex flex-col gap-4">
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                      <span className="font-bold text-primary dark:text-slate-200">Use Cases</span> are text stories used to discover and record functional requirements. They describe interactions between users and a subject.
-                    </p>
-                    <div className="p-4 bg-primary/5 rounded-xl border border-primary/10">
-                       <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">System under Development (SuD)</p>
-                       <p className="text-xs text-slate-500 leading-relaxed italic">The "Subject" is the system currently being built or discussed.</p>
-                    </div>
-                  </div>
- 
-                  <div className="flex flex-col gap-3">
-                    <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">Core Terms</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {[
-                        { term: 'Actor', desc: 'Something with behavior, such as a person, computer system, or organization.' },
-                        { term: 'Scenario', desc: 'A specific sequence of actions and interactions between actors and the system.' },
-                        { term: 'Use Case', desc: 'A collection of related success and failure scenarios describing actors using a system to support a goal.' },
-                      ].map((item) => (
-                        <div key={item.term} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
-                          <p className="text-xs font-bold text-primary mb-1">{item.term}</p>
-                          <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
- 
-              {/* Section 2: Use-Case Diagram */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
-                <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary text-[18px]">account_tree</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 02</p>
-                    <h2 className="text-base font-bold text-primary dark:text-slate-100">The Use Case Diagram</h2>
-                  </div>
-                </div>
- 
-                <div className="p-8 flex flex-col gap-6">
-                  <div className="p-5 bg-primary/5 dark:bg-primary/10 border-l-4 border-primary rounded-r-xl flex flex-col gap-2">
-                    <p className="text-xs font-bold text-primary dark:text-slate-200 uppercase tracking-widest">Graphical Depiction</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                      A visual model of the use case interactions within a system.
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      Primary actors: <span className="font-bold">left</span>, Supporting: <span className="font-bold">right</span>, Offstage: <span className="font-bold">bottom</span>.
-                    </p>
-                  </div>
- 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {[
-                      { icon: 'accessibility_new', label: 'Actors (Stick-figures)', desc: 'Nouns representing users/systems.' },
-                      { icon: 'radio_button_unchecked', label: 'Use cases (Ellipses)', desc: 'Verbs representing goals.' },
-                      { icon: 'timeline', label: 'Associations (Lines)', desc: 'Connecting actors to goals.' },
-                    ].map((item) => (
-                      <div key={item.label} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl flex flex-col gap-2 border border-primary/5">
-                        <span className="material-symbols-outlined text-primary text-[22px]">{item.icon}</span>
-                        <p className="text-[11px] font-bold text-primary dark:text-slate-100">{item.label}</p>
-                        <p className="text-[10px] leading-relaxed text-slate-500 dark:text-slate-400">{item.desc}</p>
-                      </div>
-                    ))}
-                  </div>
- 
-                  <div className="flex flex-col gap-3">
-                    <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">Kinds of Actors</p>
-                    <div className="flex flex-col gap-2">
-                      {[
-                        { tag: 'Primary', desc: 'Has user goals fulfilled through using services of the SuD.', badge: 'bg-primary/10 text-primary' },
-                        { tag: 'Supporting', desc: 'Provides a service (e.g., database) to the SuD.', badge: 'bg-accent/10 text-accent' },
-                        { tag: 'Offstage', desc: 'Has an interest in the behavior but is not primary/supporting.', badge: 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300' },
-                      ].map((a) => (
-                        <div key={a.tag} className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
-                          <span className={`mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shrink-0 ${a.badge}`}>{a.tag}</span>
-                          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{a.desc}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
- 
-              {/* Section 3: Use Case Relationships */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
-                <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-accent text-[18px]">swap_horiz</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 03</p>
-                    <h2 className="text-base font-bold text-primary dark:text-slate-100">Use Case Relationships</h2>
-                  </div>
-                </div>
- 
-                <div className="p-8 flex flex-col gap-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Include */}
-                    <div className="flex flex-col gap-4 p-5 rounded-xl border-2 border-primary/10 bg-primary/5 dark:bg-primary/5">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-bold rounded uppercase tracking-wider font-mono">&lt;&lt;include&gt;&gt;</span>
-                      </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Used if a sub-use case or series of steps is used by <span className="font-bold">several</span> use cases.
-                      </p>
-                      <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-primary/10">
-                        <p className="text-[10px] text-slate-500 leading-relaxed">
-                          Arrow points <span className="font-bold">TO</span> the child use case from the base.
-                        </p>
-                      </div>
-                    </div>
- 
-                    {/* Extend */}
-                    <div className="flex flex-col gap-4 p-5 rounded-xl border-2 border-accent/10 bg-accent/5 dark:bg-accent/5">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-accent text-white text-[10px] font-bold rounded uppercase tracking-wider font-mono">&lt;&lt;extend&gt;&gt;</span>
-                      </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Used when a use case may <span className="font-bold italic">optionally</span> take an alternate path (exceptions).
-                      </p>
-                      <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-accent/10">
-                        <p className="text-[10px] text-slate-500 leading-relaxed">
-                           Arrow points <span className="font-bold">TO</span> the base use case from the child.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
- 
-              {/* Section 4: Steps to Creating a Use Case Diagram */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
-                <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary text-[18px]">checklist</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 04</p>
-                    <h2 className="text-base font-bold text-primary dark:text-slate-100">Creating a Use Case Diagram</h2>
-                  </div>
-                </div>
-                <div className="p-8 flex flex-col gap-4">
-                  <div className="flex flex-col gap-4">
-                    {[
-                      { step: '01', title: 'Choose the system boundary', desc: 'Identify the System under Discussion (SuD).' },
-                      { step: '02', title: 'Identify primary actors', desc: 'Those whose goals are fulfilled by the system.' },
-                      { step: '03', title: 'Identify user goals', desc: 'List what each actor wants to achieve.' },
-                      { step: '04', title: 'Define use cases', desc: 'Satisfy goals and pass the EBP test.' },
-                    ].map((item) => (
-                      <div key={item.step} className="flex gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
-                        <div className="h-9 w-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-xs shrink-0">{item.step}</div>
-                        <div className="flex flex-col gap-1">
-                          <p className="text-sm font-bold text-primary dark:text-slate-100">{item.title}</p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400">{item.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
- 
-              {/* Section 5: CampusConnect Example */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
-                <div className="px-8 py-5 border-b border-primary/5 bg-slate-50/50 dark:bg-slate-800/50 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-accent text-[18px]">hub</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">Section 05</p>
-                    <h2 className="text-base font-bold text-primary dark:text-slate-100">Example: CampusConnect - Join Organization</h2>
-                  </div>
-                </div>
-                <div className="p-8 flex flex-col gap-8">
-                  <div className="p-5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-primary/5">
-                    <p className="text-xs font-bold text-primary uppercase mb-2">Scenario</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
-                      "A student discovers an interesting professional organization on CampusConnect. They navigate to the organization's page and click 'Join'. The system validates their student status and adds them to the roster. If the organization requires approval, an administrator is notified."
-                    </p>
-                  </div>
- 
-                  <div className="rounded-xl overflow-hidden border border-primary/5">
-                    {[
-                      { field: 'Use Case', value: 'Join Organization' },
-                      { field: 'Primary Actor', value: 'Student' },
-                      { field: 'Supporting Actor', value: 'Student Database, Administrator' },
-                      { field: 'Postconditions', value: "Student is added to roster; Administrator notified if approval required." },
-                    ].map((row, i) => (
-                      <div key={i} className={`grid grid-cols-12 border-t border-primary/5 first:border-t-0 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/50 dark:bg-slate-800/30'}`}>
-                        <div className="col-span-4 px-4 py-3 border-r border-primary/5">
-                          <p className="text-xs font-bold text-primary dark:text-slate-300">{row.field}</p>
-                        </div>
-                        <div className="col-span-8 px-4 py-3">
-                          <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">{row.value}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
- 
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                       <p className="text-xs font-bold text-primary/40 uppercase tracking-widest">UCD Visualization</p>
-                       <span className="text-[10px] text-slate-400 italic">Screenshot Placeholder</span>
-                    </div>
-                    <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10 group cursor-help transition-all hover:bg-slate-200 dark:hover:bg-slate-700">
-                       <div className="h-16 w-16 rounded-full bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                          <span className="material-symbols-outlined text-primary text-3xl">image</span>
-                       </div>
-                       <p className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tighter">UCD_CampusConnect_JoinOrg.png</p>
-                       <p className="text-[10px] text-slate-400 mt-1">Replace with high-res diagram screenshot</p>
-                    </div>
-                  </div>
- 
-                  <div className="flex justify-end pt-2">
-                    <button
-                      onClick={() => setActiveTab('build')}
-                      className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
-                    >
-                      Step-by-Step Build
-                      <span className="material-symbols-outlined text-sm">construction</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <>
+              {diagramType === 'ucd' && <UCDInfo setActiveTab={setActiveTab} />}
+              {diagramType === 'dmd' && <DMDInfo setActiveTab={setActiveTab} />}
+              {diagramType === 'ssd' && <SSDInfo setActiveTab={setActiveTab} />}
+              {diagramType === 'sd' && <SDInfo setActiveTab={setActiveTab} />}
+              {diagramType === 'dcd' && <DCDInfo setActiveTab={setActiveTab} />}
+            </>
           )}
 
           {/* ===== INTERACTIVE BUILD TAB ===== */}
