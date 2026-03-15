@@ -21,7 +21,7 @@ export default function DiagramModule() {
   const params = useParams();
   const diagramType = typeof params?.type === 'string' ? params.type : 'ucd';
   const diagramTitle = DIAGRAM_TITLES[diagramType] ?? 'Diagram Module';
-  const [activeTab, setActiveTab] = useState<'purpose' | 'build' | 'quiz'>('build');
+  const [activeTab, setActiveTab] = useState<'info' | 'build' | 'quiz'>('info');
 
   return (
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
@@ -34,16 +34,15 @@ export default function DiagramModule() {
           {/* Page Header & Tabs */}
           <div className="mb-8">
             <div className="flex flex-col gap-1 mb-6">
-              <h1 className="text-3xl font-bold text-primary dark:text-slate-100">Multi-Modal Learning Module</h1>
-              <p className="text-primary/60 dark:text-slate-400 font-medium">{diagramTitle} Construction</p>
+              <h1 className="text-3xl font-bold text-primary dark:text-slate-100">{diagramTitle} Construction</h1>
             </div>
             <div className="flex border-b border-primary/10 gap-8">
               <button
-                onClick={() => setActiveTab('purpose')}
-                className={`flex items-center gap-2 border-b-2 pb-4 px-2 hover:text-primary transition-all ${activeTab === 'purpose' ? 'border-primary text-primary' : 'border-transparent text-primary/50'}`}
+                onClick={() => setActiveTab('info')}
+                className={`flex items-center gap-2 border-b-2 pb-4 px-2 hover:text-primary transition-all ${activeTab === 'info' ? 'border-primary text-primary' : 'border-transparent text-primary/50'}`}
               >
                 <span className="material-symbols-outlined text-sm">info</span>
-                <span className="text-sm font-bold uppercase tracking-wider">Purpose</span>
+                <span className="text-sm font-bold uppercase tracking-wider">Information</span>
               </button>
               <button
                 onClick={() => setActiveTab('build')}
@@ -62,8 +61,8 @@ export default function DiagramModule() {
             </div>
           </div>
 
-             {/* ===== PURPOSE TAB ===== */}
-          {activeTab === 'purpose' && (
+             {/* ===== INFORMATION TAB ===== */}
+          {activeTab === 'info' && (
             <div className="flex flex-col gap-8 max-w-4xl">
  
               {/* Section 0: What is a Use Case? */}
