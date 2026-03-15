@@ -999,7 +999,13 @@ export default function DiagramModule() {
 
                     <div className="flex items-center justify-between border-t border-primary/5 pt-8">
                       <button 
-                         onClick={() => currentQuestionIdx > 0 && setCurrentQuestionIdx(prev => prev - 1)}
+                         onClick={() => {
+                           if (currentQuestionIdx > 0) {
+                             setCurrentQuestionIdx(prev => prev - 1);
+                             setSelectedAnswer(null);
+                             setIsAnswerSubmitted(false);
+                           }
+                         }}
                          disabled={currentQuestionIdx === 0}
                          className="flex items-center gap-2 text-slate-400 hover:text-primary transition-colors font-bold text-sm disabled:opacity-0"
                       >
