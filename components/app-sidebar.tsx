@@ -34,7 +34,7 @@ export default function AppSidebar({ onSettings }: { onSettings?: () => void }) 
         <nav className="flex flex-col gap-1">
           <Link
             href="/dashboard"
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors ${isActive('/') ? 'bg-white/15 text-white font-semibold' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors ${isActive('/dashboard') ? 'bg-white/15 text-white font-semibold' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
           >
             <span className="material-symbols-outlined text-[20px]">dashboard</span>
             <span className="text-sm font-medium">Dashboard</span>
