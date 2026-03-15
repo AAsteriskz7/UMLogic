@@ -183,14 +183,14 @@ export const QUIZ_DATA: Record<string, Question[]> = {
     {
       id: 'ssd-5',
       module: 'CampusConnect context',
-      text: 'In the SSD for "Join Organization", what is the primary input event?',
+      text: 'In the SSD for Priya viewing her profile and upcoming events, which system event best matches the scenario?',
       options: [
-        { label: 'A', text: 'validateStudent()', isCorrect: false },
-        { label: 'B', text: 'joinOrganization(studentID, orgID)', isCorrect: true },
-        { label: 'C', text: 'Redirect to Dashboard', isCorrect: false },
-        { label: 'D', text: 'showNotification()', isCorrect: false }
+        { label: 'A', text: 'renderProfileCard()', isCorrect: false },
+        { label: 'B', text: 'viewProfilePage()', isCorrect: true },
+        { label: 'C', text: 'queryUpcomingEventsFromDatabase()', isCorrect: false },
+        { label: 'D', text: 'drawOrganizationList()', isCorrect: false }
       ],
-      explanation: 'The system operation joinOrganization is the event initiated by the actor (Student) crossing the system boundary.'
+      explanation: 'In Scenario 3, Priya interacts with CampusConnect by requesting to view her profile page. SSD messages should describe actor-to-system intentions, not internal rendering or database steps.'
     }
   ],
   sd: [
