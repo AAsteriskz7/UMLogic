@@ -20,7 +20,7 @@ export default function AppSidebar({ onSettings }: { onSettings?: () => void }) 
     <aside className="w-64 bg-primary text-white flex flex-col justify-between p-5 shrink-0">
       <div className="flex flex-col gap-6">
         {/* Logo */}
-        <div className="flex items-center gap-3 px-1">
+        <Link href="/" className="flex items-center gap-3 px-1 transition-opacity hover:opacity-80">
           <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-primary shrink-0">
             <span className="material-symbols-outlined font-bold">schema</span>
           </div>
@@ -28,7 +28,7 @@ export default function AppSidebar({ onSettings }: { onSettings?: () => void }) 
             <h1 className="text-white text-lg font-bold leading-none">UMLogic</h1>
             <p className="text-white/60 text-xs font-medium">Object &amp; Design</p>
           </div>
-        </div>
+        </Link>
 
         {/* Main Nav */}
         <nav className="flex flex-col gap-1">
