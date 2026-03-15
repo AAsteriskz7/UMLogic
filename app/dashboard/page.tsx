@@ -297,7 +297,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div
-            className="absolute right-0 top-0 h-full w-1/2 bg-cover bg-center opacity-70"
+            className="absolute right-0 top-0 h-full w-1/2 bg-cover bg-center opacity-50"
             style={{
               backgroundImage: "url('/hero-viz.png')",
               maskImage: 'linear-gradient(to left, black 50%, transparent 100%)',
