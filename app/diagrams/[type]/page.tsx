@@ -341,8 +341,8 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
             <p className="text-sm font-bold text-primary">Interactive Traceability</p>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">See how the "Student" and "Event" concepts turn into actual code classes.</p>
           </div>
-          <Link href="/diagrams/dcd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
-            Go to DCD
+          <Link href="/diagrams/ucd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to UCD
           </Link>
         </div>
         
@@ -777,10 +777,10 @@ const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
         <div className="mt-4 p-5 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
           <div>
             <p className="text-sm font-bold text-primary">Interactive Traceability</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Trace these methods back to the messages in the Sequence Diagram.</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Trace these methods back to the messages in the Domain Model Diagram.</p>
           </div>
-          <Link href="/diagrams/sd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
-            Go to SD
+          <Link href="/diagrams/dmd" className="px-5 py-2.5 bg-white dark:bg-slate-800 text-primary font-bold text-sm rounded-lg shadow-sm border border-primary/20 hover:bg-primary hover:text-white transition-all">
+            Go to DMD
           </Link>
         </div>
 
