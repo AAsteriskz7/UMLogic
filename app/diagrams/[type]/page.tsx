@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import AppSidebar from '@/components/app-sidebar';
@@ -143,10 +144,7 @@ const UCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: 'build' |
             </div>
           ))}
         </div>
-        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
-           <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
-           <p className="text-xs font-bold text-slate-400">UCD_CampusConnect_JoinOrg.png</p>
-        </div>
+        <DiagramPreview src="/diagram-images/UCD.png" alt="Use Case Diagram for CampusConnect" />
       </div>
     </div>
 
@@ -295,10 +293,7 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
             </div>
           ))}
         </div>
-        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
-          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
-          <p className="text-xs font-bold text-slate-400">DMD_CampusConnect_Placeholder.png</p>
-        </div>
+        <DiagramPreview src="/diagram-images/DMD.png" alt="Domain Model Diagram for CampusConnect" />
       </div>
     </div>
 
@@ -332,6 +327,20 @@ const DMDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
         
         <InfoFooter setActiveTab={setActiveTab} diagramTitle={diagramTitle} />
       </div>
+    </div>
+  </div>
+);
+
+const DiagramPreview = ({ src, alt }: { src: string; alt: string }) => (
+  <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center border-2 border-dashed border-primary/10 overflow-hidden p-4">
+    <div className="relative w-full h-full">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-contain"
+        sizes="(max-width: 1024px) 100vw, 896px"
+      />
     </div>
   </div>
 );
@@ -435,10 +444,7 @@ const SSDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
             </div>
           ))}
         </div>
-        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
-          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
-          <p className="text-xs font-bold text-slate-400">SSD_CampusConnect_Placeholder.png</p>
-        </div>
+        <DiagramPreview src="/diagram-images/SSD.png" alt="System Sequence Diagram for CampusConnect" />
       </div>
     </div>
 
@@ -568,10 +574,7 @@ const SDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => vo
             </div>
           ))}
         </div>
-        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
-          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
-          <p className="text-xs font-bold text-slate-400">SD_CampusConnect_Placeholder.png</p>
-        </div>
+        <DiagramPreview src="/diagram-images/SD.png" alt="Sequence Diagram for CampusConnect" />
       </div>
     </div>
 
@@ -701,10 +704,7 @@ const DCDInfo = ({ setActiveTab, diagramTitle }: { setActiveTab: (tab: any) => v
             </div>
           ))}
         </div>
-        <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-primary/10">
-          <span className="material-symbols-outlined text-primary text-3xl mb-2">image</span>
-          <p className="text-xs font-bold text-slate-400">DCD_CampusConnect_Placeholder.png</p>
-        </div>
+        <DiagramPreview src="/diagram-images/DCD.png" alt="Design Class Diagram for CampusConnect" />
       </div>
     </div>
 
