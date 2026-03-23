@@ -1,0 +1,15 @@
+
+> umlogic@0.1.0 dev
+> next dev
+
+⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.2:3001
+
+✓ Starting...
+⨯ Unable to acquire lock at /app/.next/dev/lock, is another instance of next dev running? GET /about-us 200 in 697ms (compile: 400ms, render: 297ms)
+ GET / 200 in 114ms (compile: 8ms, render: 106ms)
+ GET /about-us 200 in 236ms (compile: 160ms, render: 76ms)
+ GET / 200 in 565ms (compile: 190ms, render: 375ms)
+ GET /about-us 200 in 309ms (compile: 217ms, render: 92ms)

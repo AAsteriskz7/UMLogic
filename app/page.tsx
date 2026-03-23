@@ -526,6 +526,7 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-slate-500 text-sm font-medium">UMLogic — Learn Software Design.</p>
             <div className="flex gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
+              <Link className="hover:text-[#B3A369] transition-colors" href="/about-us">About Us</Link>
               <a className="hover:text-[#B3A369] transition-colors" href="https://syllabus.gatech.edu/syllabi/2340/a" target="_blank" rel="noopener noreferrer">Syllabus</a>
               <a className="hover:text-[#B3A369] transition-colors" href="https://github.com/AAsteriskz7/umlogic" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
